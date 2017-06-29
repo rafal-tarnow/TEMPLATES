@@ -4,47 +4,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <SOIL/SOIL.h>
+#include "texture_factory.hpp"
 
-/* ascii code for the escape key */
+
 #define ESCAPE 27
 
-/* The number of our GLUT window */
 int window;
 const int window_width = 800, window_height = 600;
 
-/* floats for x rotation, y rotation, z rotation */
 float xrot, yrot, zrot;
-
-/* storage for one texture  */
 GLuint texture[1];
 
+#define IMAGE_LOCATION "./Data/images/skrzynka.png"
 
-// Load Bitmaps And Convert To Textures
-void LoadGLTextures() {
-    // Load Texture
-
-    #define IMAGE_LOC "./Data/images/NeHe.bmp"
-
-    int width, height;
-    unsigned char * image = SOIL_load_image(IMAGE_LOC, &width, &height, 0, SOIL_LOAD_RGBA);
-
-    // Create Texture
-    glGenTextures(1, &texture[0]);
-    glBindTexture(GL_TEXTURE_2D, texture[0]);   // 2d texture (x and y size)
-
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR); // scale linearly when image bigger than texture
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR); // scale linearly when image smalled than texture
-
-    // 2d texture, level of detail 0 (normal), 3 components (red, green, blue), x size from image, y size from image,
-    // border 0 (normal), rgb color data, unsigned byte data, and finally the data itself.
-    glTexImage2D(GL_TEXTURE_2D, 0, 3, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
-};
-
-/* A general OpenGL initialization function.  Sets all of the initial parameters. */
 void InitGL(int Width, int Height)	        // We call this right after our OpenGL window is created.
 {
-    LoadGLTextures();				// Load The Texture(s)
+    texture[0] = GenerateTexture(IMAGE_LOCATION);				// Load The Texture(s)
     glEnable(GL_TEXTURE_2D);			// Enable Texture Mapping
     glClearColor(0.0f, 0.0f, 1.0f, 0.0f);	// Clear The Background Color To Blue
     glClearDepth(1.0);				// Enables Clearing Of The Depth Buffer
