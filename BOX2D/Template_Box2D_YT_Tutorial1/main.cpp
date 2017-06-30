@@ -58,6 +58,7 @@ void drawSquare(b2Vec2* points,b2Vec2 center,float angle)
 
 void init()
 {
+    glEnable(GL_MULTISAMPLE);
     glMatrixMode(GL_PROJECTION);
     glOrtho(0,WIDTH,HEIGHT,0,-1,1);
     glMatrixMode(GL_MODELVIEW);
@@ -89,6 +90,8 @@ int main(int argc,char** argv)
 {
     SDL_Init(SDL_INIT_EVERYTHING);
     SDL_SetVideoMode(640,480,32,SDL_OPENGL);
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 16);
     Uint32 start;
     SDL_Event event;
     bool running=true;
