@@ -15,6 +15,7 @@ LIBS += -lGL
 LIBS += -lglut
 LIBS += -lSDL
 LIBS += -lSOIL
+LIBS += -lGLEW
 
 
 
