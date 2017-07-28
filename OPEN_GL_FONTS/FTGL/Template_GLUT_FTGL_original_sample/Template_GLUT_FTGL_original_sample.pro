@@ -22,7 +22,8 @@ LIBS += -lftgl
 SOURCES += main.cpp
 
 DISTFILES += \
-    data/font/arial.ttf
+    data/font/arial.ttf \
+    data/font/design_graffiti_agentorange_www_myfontfree_com.ttf
 
 HEADERS += \
     config.h

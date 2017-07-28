@@ -13,7 +13,7 @@ using namespace std;
 static FTFont *font[2];
 static int fontindex = 0;
 
-#define FONT_FILE "./data/font/arial.ttf"
+#define FONT_FILE "./data/font/design_graffiti_agentorange_www_myfontfree_com.ttf"
 
 
 
@@ -36,9 +36,11 @@ static void RenderScene(void)
 
     glPushMatrix();
     {
-        //glRotatef(n / 1.11, 1.0, 1.0, 1.0);
-        glColor3f(1.0, 0.0, 0.0);
-        font[fontindex]->Render("ZMT");
+        glTranslatef(-100,-100,0);
+       // glRotatef(n / 1.11, 1.0, 1.0, 1.0);
+        glColor3f(0.2, 1.0, 0.0);
+
+        font[fontindex]->Render("ZMT: 123 Tarnow");
     }
     glPopMatrix();
 
@@ -97,10 +99,10 @@ int main(int argc, char **argv)
 
 
 
-    font[0]->FaceSize(160);
+    font[0]->FaceSize(40);
     font[0]->CharMap(ft_encoding_unicode);
 
-    font[1]->FaceSize(160);
+    font[1]->FaceSize(40);
     font[1]->CharMap(ft_encoding_unicode);
 
 
