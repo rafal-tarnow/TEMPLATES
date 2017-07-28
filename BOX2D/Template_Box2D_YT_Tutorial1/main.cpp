@@ -8,10 +8,10 @@
 #include <GL/glew.h>
 
 #if WINDOW_ENGINE == SDL
-    #include <SDL/SDL.h>
-    #include <SDL/SDL_image.h>
+#include <SDL/SDL.h>
+#include <SDL/SDL_image.h>
 #elif  WINDOW_ENGINE == GLUT
-    #include <GL/freeglut.h>
+#include <GL/freeglut.h>
 #endif
 
 #include <GL/gl.h>
@@ -47,8 +47,8 @@ void printOpenGLVersion(){
     err = glGetError(); //w celu ignorowania błędu 1282 INVALID ENUM
     GL_CHECK_ERRORS
 
-    //wyprowadzanie informacji na ekran
-    cout<<"\tWersja GLEW "<<glewGetString(GLEW_VERSION)<<endl;
+            //wyprowadzanie informacji na ekran
+            cout<<"\tWersja GLEW "<<glewGetString(GLEW_VERSION)<<endl;
     cout<<"\tProducent: "<<glGetString (GL_VENDOR)<<endl;
     cout<<"\tRenderer: "<<glGetString (GL_RENDERER)<<endl;
     cout<<"\tWersja OpenGL: "<<glGetString (GL_VERSION)<<endl;
@@ -95,6 +95,21 @@ void drawSquare(b2Vec2* points,b2Vec2 center,float angle)
     glPopMatrix();
 }
 
+
+void reshape(int width, int height) {
+    cout << "reshape()" << endl;
+    GLfloat fieldOfView = 90.0f;
+    glViewport (0, 0, (GLsizei) width, (GLsizei) height);
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(0,WIDTH,HEIGHT,0,-1,1);
+
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+}
+
 void init()
 {
     cout << "init()" << endl;
@@ -104,6 +119,7 @@ void init()
     glMatrixMode(GL_MODELVIEW);
     glEnable(GL_TEXTURE_2D);
     glClearColor(143.0/255.0,236.0/255.0,254.0/255.0,1);
+
     world=new b2World(b2Vec2(0.0,9.81));
 
     texture = GenerateTexture("./Data/images/skrzynka.png");
@@ -116,6 +132,8 @@ void display()
     cout << "display()" << endl;
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
+
+
     b2Body* tmp=world->GetBodyList();
     b2Vec2 points[4];
     while(tmp)
@@ -125,6 +143,12 @@ void display()
         drawSquare(points,tmp->GetWorldCenter(),tmp->GetAngle());
         tmp=tmp->GetNext();
     }
+
+    glFlush();
+
+#if  WINDOW_ENGINE == GLUT
+    glutSwapBuffers();
+#endif
 }
 
 void enableMultisample(int msaa)
@@ -150,6 +174,8 @@ void enableMultisample(int msaa)
 
 
 
+
+
 #if WINDOW_ENGINE == SDL
 
 int main(int argc,char** argv)
@@ -162,6 +188,7 @@ int main(int argc,char** argv)
     SDL_Event event;
     bool running=true;
     init();
+    addRect(100,100,40,40,true);
     while(running)
     {
         start=SDL_GetTicks();
@@ -181,6 +208,7 @@ int main(int argc,char** argv)
                 }
                 break;
             case SDL_MOUSEBUTTONDOWN:
+
                 addRect(event.button.x,event.button.y,40,40,true);
                 break;
 
@@ -200,58 +228,19 @@ int main(int argc,char** argv)
 
 
 
-void reshape(int width, int height) {
-    cout << "reshape()" << endl;
-    GLfloat fieldOfView = 90.0f;
-    glViewport (0, 0, (GLsizei) width, (GLsizei) height);
+void mouseCallbackForGlut( int button, int state, int x, int y){
+    cout << "mouse callback x = " << x << " y = " << y << endl;
 
-    glMatrixMode (GL_PROJECTION);
-    glLoadIdentity();
-    //gluPerspective(fieldOfView, (GLfloat) width/(GLfloat) height, 0.1, 500.0);
-
-    glMatrixMode(GL_PROJECTION_MATRIX);
-    glOrtho(0.0f,640,0.0f,480,1000.0f,-1000.0f);
-
-
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-}
-
-static float angle = 0.0f;
-
-/* render the scene */
-void draw() {
-
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    //    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-
-    /* render the scene here */
-
-    glTranslatef(WIDTH/2,HEIGHT/2,0);
-    glRotatef(angle,0.0f,0.0f,1.0f);
-
-    glBegin(GL_TRIANGLES);
-    {
-        glColor3f(1.0f,0.0f,1.0f);
-        glVertex2f(-100.0f, -50.0f);
-
-        glColor3f(0.0f,1.0f,0.0f);
-        glVertex2f( 100.0f, -50.0f);
-
-        glColor3f(0.0f,0.0f,1.0f);
-        glVertex2f( 0.0f,150.0f);
+    if ((button == GLUT_LEFT_BUTTON) && (state == GLUT_DOWN)) {
+        addRect(x, y,40,40,true);
     }
-    glEnd();
 
-    glFlush();
-    glutSwapBuffers();
+    glutPostRedisplay();
 }
 
-void timer(int timer_id){
-    glutTimerFunc(30,timer,0);
-      angle += 1.0f;
-     world->Step(1.0/30.0,8,3);
+void timerForGlut(int timer_id){
+    glutTimerFunc(30,timerForGlut,0);
+    world->Step(1.0/30.0,8,3);
     glutPostRedisplay();
 }
 
@@ -270,14 +259,14 @@ int main(int argc, char** argv) {
 
     //KEYBOARD
     glutIgnoreKeyRepeat(true); // ignore keys held down
-
+    glutMouseFunc(mouseCallbackForGlut);
     glutReshapeFunc(reshape);
-    glutDisplayFunc(draw);
-    glutTimerFunc(100,timer,0);
+    glutDisplayFunc(display);
+    glutTimerFunc(100,timerForGlut,0);
     //glutIdleFunc(idle);
 
-    enableMultisample(0);
-    //init();
+    enableMultisample(1);
+    init();
 
     glutMainLoop();
     return 0;
