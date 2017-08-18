@@ -48,15 +48,17 @@ GLuint shader_program;
 
 void renderFunction(){
     glClear(GL_COLOR_BUFFER_BIT);
+
     glUseProgram(shader_program);
-    glDrawArrays(GL_LINE_LOOP, 0, 3);
+    glDrawArrays(GL_LINE_LOOP, 0, 4);
 
 }
 
 
-
 int main(void) {
     GLuint triangle_vbo;
+    GLuint rectangle_vbo;
+
     GLint pos;
 
     InitGLFWWindow();
@@ -66,6 +68,7 @@ int main(void) {
 
     pos = glGetAttribLocation(shader_program, "position");
 
+    //triangle
     glGenBuffers(1, &triangle_vbo);
     glBindBuffer(GL_ARRAY_BUFFER, triangle_vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(triangle_vertices), triangle_vertices, GL_STATIC_DRAW);
@@ -74,6 +77,16 @@ int main(void) {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 
+    //rectangle
+    glGenBuffers(1,&rectangle_vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, rectangle_vbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(quad_vertices), quad_vertices, GL_STATIC_DRAW);
+    glVertexAttribPointer(pos, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)0);
+    glEnableVertexAttribArray(pos);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+
+    //MAIN LOOP
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
         {
