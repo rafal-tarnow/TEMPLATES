@@ -22,7 +22,7 @@ const int HEIGHT = 512;
 //shader 
 GLSLShader shader;
 
-//tablica wierzcho≥kÛw i obiekt bufora wierzcho≥kÛw dla pe≥noekranowego czworokπta
+//tablica wierzcho≈Çk√≥w i obiekt bufora wierzcho≈Çk√≥w dla pe≈Çnoekranowego czworokƒÖta
 GLuint vaoID;
 GLuint vboVerticesID;
 GLuint vboIndicesID;
@@ -30,7 +30,7 @@ GLuint vboIndicesID;
 //ID tekstury
 GLuint textureID;
 
-//wierzcho≥ki i indeksy czworokπta
+//wierzcho≈Çki i indeksy czworokƒÖta
 glm::vec2 vertices[4];
 GLushort indices[6];
 
@@ -41,7 +41,7 @@ const string filename = "media/Lenna.png";
 void OnInit() {
 	GL_CHECK_ERRORS
 
-	//wczytanie shaderÛw
+	//wczytanie shader√≥w
 	shader.LoadFromFile(GL_VERTEX_SHADER, "shadery/shader.vert");
 	shader.LoadFromFile(GL_FRAGMENT_SHADER, "shadery/shader.frag");
 	//compile and link shader
@@ -56,14 +56,14 @@ void OnInit() {
 
 	GL_CHECK_ERRORS
 
-	//Ustalanie geometrii czworokπta
-	//ustalanie wierzcho≥kÛw czworokπta
+	//Ustalanie geometrii czworokƒÖta
+	//ustalanie wierzcho≈Çk√≥w czworokƒÖta
 	vertices[0] = glm::vec2(0.0,0.0);
 	vertices[1] = glm::vec2(1.0,0.0);
 	vertices[2] = glm::vec2(1.0,1.0);
 	vertices[3] = glm::vec2(0.0,1.0);
 
-	//wype≥nianie tablicy indeksÛw czworokπta
+	//wype≈Çnianie tablicy indeks√≥w czworokƒÖta
 	GLushort* id=&indices[0];
 	*id++ =0;
 	*id++ =1;
@@ -74,7 +74,7 @@ void OnInit() {
 
 	GL_CHECK_ERRORS
 
-	//przygotowanie vao i vbo dla czworokπta
+	//przygotowanie vao i vbo dla czworokƒÖta
 	glGenVertexArrays(1, &vaoID);
 	glGenBuffers(1, &vboVerticesID);
 	glGenBuffers(1, &vboIndicesID);
@@ -82,14 +82,14 @@ void OnInit() {
 	glBindVertexArray(vaoID);
 
 		glBindBuffer (GL_ARRAY_BUFFER, vboVerticesID);
-		//przekazanie wierzcho≥kÛw czworokπta do obiektu bufora
+		//przekazanie wierzcho≈Çk√≥w czworokƒÖta do obiektu bufora
 		glBufferData (GL_ARRAY_BUFFER, sizeof(vertices), &vertices[0], GL_STATIC_DRAW);
 		GL_CHECK_ERRORS
-		//w≥πczenie tablicy atrybutÛw wierzho≥ka dla po≥oøenia
+		//w≈ÇƒÖczenie tablicy atrybut√≥w wierzho≈Çka dla po≈Ço≈ºenia
 		glEnableVertexAttribArray(shader["vVertex"]);
 		glVertexAttribPointer(shader["vVertex"], 2, GL_FLOAT, GL_FALSE,0,0);
 		GL_CHECK_ERRORS
-		//przekazanie indeksÛw czworokπta do bufora tablicy elementÛw
+		//przekazanie indeks√≥w czworokƒÖta do bufora tablicy element√≥w
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIndicesID);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), &indices[0], GL_STATIC_DRAW);
 		GL_CHECK_ERRORS
@@ -102,7 +102,7 @@ void OnInit() {
         cerr<<"Nie mozna wczytac obrazu: "<<filename.c_str()<<endl;
         exit(EXIT_FAILURE);
     }
-    //odwracanie obrazu wzglÍdem osi Y
+    //odwracanie obrazu wzglƒôdem osi Y
     int i,j;
     for( j = 0; j*2 < texture_height; ++j )
     {
@@ -117,11 +117,11 @@ void OnInit() {
             ++index2;
         }
     }
-    //przygotowanie tekstury i zwiπzanie jej jednostkπ teksturujπcπ o numerze 0
+    //przygotowanie tekstury i zwiƒÖzanie jej jednostkƒÖ teksturujƒÖcƒÖ o numerze 0
     glGenTextures(1, &textureID);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, textureID);
-        //ustawienie parametrÛw tekstury
+        //ustawienie parametr√≥w tekstury
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
@@ -130,7 +130,7 @@ void OnInit() {
         //alokowanie tekstury
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texture_width, texture_height, 0, GL_RGB, GL_UNSIGNED_BYTE, pData);
 
-    //zwalnianie zajÍtych wczeúniej zasobÛw
+    //zwalnianie zajƒôtych wcze≈õniej zasob√≥w
     SOIL_free_image_data(pData);
 
 
@@ -140,7 +140,7 @@ void OnInit() {
 }
 
 
-//zwalnianie wszystkich alokowanych zasobÛw
+//zwalnianie wszystkich alokowanych zasob√≥w
 void OnShutdown() {
 
 	//likwidacja shadera
@@ -156,25 +156,25 @@ void OnShutdown() {
 	cout<<"Zamkniecie powiodlo sie"<<endl;
 }
 
-//obs≥uga zdarzenia zmiany wymiarÛw okna
+//obs≈Çuga zdarzenia zmiany wymiar√≥w okna
 void OnResize(int w, int h) {
-	//ustalanie wymiarÛw okna widokowego
+	//ustalanie wymiar√≥w okna widokowego
 	glViewport (0, 0, (GLsizei) w, (GLsizei) h);
 }
 
-//funkcja wyúwietlania
+//funkcja wy≈õwietlania
 void OnRender() {
-	//czyszczenie buforÛw koloru i g≥Íbi
+	//czyszczenie bufor√≥w koloru i g≈Çƒôbi
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
-	//wiπzanie shadera
+	//wiƒÖzanie shadera
 	shader.Use();
-		//rysowanie pe≥noekranowego czworokπta
+		//rysowanie pe≈Çnoekranowego czworokƒÖta
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
-	//odwiπzywanie shadera
+	//odwiƒÖzywanie shadera
 	shader.UnUse();
 
-	//zamiana buforÛw w celu wyúwietlenia obrazu
+	//zamiana bufor√≥w w celu wy≈õwietlenia obrazu
 	glutSwapBuffers();
 }
 
@@ -198,7 +198,7 @@ int main(int argc, char** argv) {
 			cout<<"Sterownik obsluguje OpenGL 3.3\nDetails:"<<endl;
 		}
 	}
-	err = glGetError(); //w celu ignorowania b≥Ídu 1282 INVALID ENUM
+	err = glGetError(); //w celu ignorowania b≈Çƒôdu 1282 INVALID ENUM
 	GL_CHECK_ERRORS
 
 	//wyprowadzanie informacji na ekran
@@ -218,7 +218,7 @@ int main(int argc, char** argv) {
 	glutDisplayFunc(OnRender);
 	glutReshapeFunc(OnResize);
 
-	//wywo≥anie pÍtli g≥Ûwnej
+	//wywo≈Çanie pƒôtli g≈Ç√≥wnej
 	glutMainLoop();
 
 	return 0;
