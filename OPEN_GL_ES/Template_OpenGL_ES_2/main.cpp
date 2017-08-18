@@ -28,13 +28,19 @@ static const GLchar* fragment_shader_source =
         "}                                          \n";
 
 
-static const GLfloat vertices[] = {
+static const GLfloat quad_vertices[] = {
     0.5f,  0.5f, 0.0f,
     0.5f, -0.5f, 0.0f,
     -0.5f, -0.5f, 0.0f,
     -0.5f, 0.5f, 0.0f,
 };
 
+
+static const GLfloat triangle_vertices[] = {
+    0.0f,  0.5f, 0.0f,
+    0.5f, -0.5f, 0.0f,
+    -0.5f, -0.5f, 0.0f,
+};
 
 
 GLFWwindow* window;
@@ -43,14 +49,14 @@ GLuint shader_program;
 void renderFunction(){
     glClear(GL_COLOR_BUFFER_BIT);
     glUseProgram(shader_program);
-    glDrawArrays(GL_LINE_LOOP, 0, 4);
+    glDrawArrays(GL_LINE_LOOP, 0, 3);
 
 }
 
 
 
 int main(void) {
-    GLuint vbo;
+    GLuint triangle_vbo;
     GLint pos;
 
     InitGLFWWindow();
@@ -60,9 +66,9 @@ int main(void) {
 
     pos = glGetAttribLocation(shader_program, "position");
 
-    glGenBuffers(1, &vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glGenBuffers(1, &triangle_vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, triangle_vbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(triangle_vertices), triangle_vertices, GL_STATIC_DRAW);
     glVertexAttribPointer(pos, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)0);
     glEnableVertexAttribArray(pos);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -76,7 +82,7 @@ int main(void) {
         glfwSwapBuffers(window);
     }
 
-    glDeleteBuffers(1, &vbo);
+    glDeleteBuffers(1, &triangle_vbo);
     glfwTerminate();
     return EXIT_SUCCESS;
 }
