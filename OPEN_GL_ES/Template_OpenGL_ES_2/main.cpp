@@ -4,11 +4,14 @@
 #define GLFW_INCLUDE_ES2
 #include <GLFW/glfw3.h>
 
+#include "texture_manager.hpp"
+
 static const GLuint WIDTH = 800;
 static const GLuint HEIGHT = 600;
 void InitGLFWWindow();
 GLint compileShaders(const char *vertex_shader_source, const char *fragment_shader_source);
 void initOpenGLViewport();
+GLuint prepareVBO(const GLfloat * data, GLsizeiptr size);
 
 
 
@@ -16,74 +19,115 @@ void initOpenGLViewport();
 static const GLchar* vertex_shader_source =
         "#version 100                           \n"
         "attribute vec3 position;               \n"
+        "attribute vec2 texCoord;               \n"
+        "varying vec2 v_TexCoordinate;          \n"
         "void main() {                          \n"
         "   gl_Position = vec4(position, 1.0);  \n"
+        "   v_TexCoordinate = texCoord;          \n"
         "}                                      \n";
 
 
 static const GLchar* fragment_shader_source =
         "#version 100                               \n"
+        "precision mediump float;                   \n"
+        "varying vec2 v_TexCoordinate;              \n"
+        "uniform sampler2D ourTexture;              \n"
         "void main() {                              \n"
-        "   gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);\n"
+        "   gl_FragColor = texture2D(ourTexture,v_TexCoordinate);\n"
         "}                                          \n";
 
 
-static const GLfloat quad_vertices[] = {
-    0.5f,  0.5f, 0.0f,
-    0.5f, -0.5f, 0.0f,
-    -0.5f, -0.5f, 0.0f,
-    -0.5f, 0.5f, 0.0f,
-};
+//static const GLfloat quad_vertices[] = {
+//    0.5f,  0.5f, 0.0f,
+//    0.5f, -0.5f, 0.0f,
+//    -0.5f, -0.5f, 0.0f,
+//    -0.5f, 0.5f, 0.0f,
+//};
 
+static const GLfloat quad_vertices[] = {
+    0.5f,  0.5f,    1.0f,1.0f,
+    0.5f, 0.0f,     1.0f,0.0f,
+    0.0f, 0.0f,     0.0f,0.0f,
+    0.0f, 0.5f,     0.0f,1.0f,
+};
 
 static const GLfloat triangle_vertices[] = {
-    0.0f,  0.5f, 0.0f,
-    0.5f, -0.5f, 0.0f,
-    -0.5f, -0.5f, 0.0f,
+    0.0f,  0.5f, 0.0f,      0.5f, 1.0f,
+    0.5f, -0.5f, 0.0f,      1.0f, 0.0f,
+    -0.5f, -0.5f, 0.0f,     0.0f, 0.0f
 };
+
 
 
 GLFWwindow* window;
 GLuint shader_program;
+GLuint triangle_vbo_id;
+GLuint rectangle_vbo_id;
+GLint position_location;
+GLint texCoord_attrib_location;
+GLuint texture_id;
 
 void renderFunction(){
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT );
 
     glUseProgram(shader_program);
-    glDrawArrays(GL_LINE_LOOP, 0, 4);
+
+
+//        glActiveTexture(GL_TEXTURE0);
+//        glBindTexture(GL_TEXTURE_2D, texture_id);
+//        glUniform1i(texCoord_attrib_location, 0);
+//        glBindBuffer(GL_ARRAY_BUFFER, rectangle_vbo_id);
+//        {
+
+//            glVertexAttribPointer(position_location, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)0);
+//            glEnableVertexAttribArray(position_location);
+//            glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+//             //glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+//        }
+//        glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+
+    glBindBuffer(GL_ARRAY_BUFFER, triangle_vbo_id);
+
+
+    glVertexAttribPointer(position_location, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
+    glEnableVertexAttribArray(position_location);
+
+    glVertexAttribPointer(texCoord_attrib_location, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+    glEnableVertexAttribArray(texCoord_attrib_location);
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture_id);
+    glUniform1i(texCoord_attrib_location, 0);
+
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+
+    glUseProgram(0);
 
 }
 
 
 int main(void) {
-    GLuint triangle_vbo;
-    GLuint rectangle_vbo;
-
-    GLint pos;
 
     InitGLFWWindow();
     initOpenGLViewport();
 
+
+
     shader_program = compileShaders(vertex_shader_source, fragment_shader_source);
 
-    pos = glGetAttribLocation(shader_program, "position");
-
-    //triangle
-    glGenBuffers(1, &triangle_vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, triangle_vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(triangle_vertices), triangle_vertices, GL_STATIC_DRAW);
-    glVertexAttribPointer(pos, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)0);
-    glEnableVertexAttribArray(pos);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
+    position_location = glGetAttribLocation(shader_program, "position");
+    texCoord_attrib_location = glGetAttribLocation(shader_program,"texCoord");
 
     //rectangle
-    glGenBuffers(1,&rectangle_vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, rectangle_vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(quad_vertices), quad_vertices, GL_STATIC_DRAW);
-    glVertexAttribPointer(pos, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)0);
-    glEnableVertexAttribArray(pos);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    rectangle_vbo_id = prepareVBO(quad_vertices, sizeof(quad_vertices));
+    triangle_vbo_id = prepareVBO(triangle_vertices, sizeof(triangle_vertices));
+
+    texture_id = TextureManager::getTextureId("./data/png/bg.png");
+    //texture_id = TextureManager::getTextureId("./data/png/coin_2.png");
+
 
 
     //MAIN LOOP
@@ -95,7 +139,7 @@ int main(void) {
         glfwSwapBuffers(window);
     }
 
-    glDeleteBuffers(1, &triangle_vbo);
+    glDeleteBuffers(1, &triangle_vbo_id);
     glfwTerminate();
     return EXIT_SUCCESS;
 }
@@ -106,6 +150,16 @@ int main(void) {
 
 
 
+GLuint prepareVBO(const GLfloat * data, GLsizeiptr size){
+    GLuint vbo;
+
+    glGenBuffers(1,&vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    return vbo;
+}
 
 
 void InitGLFWWindow(){
