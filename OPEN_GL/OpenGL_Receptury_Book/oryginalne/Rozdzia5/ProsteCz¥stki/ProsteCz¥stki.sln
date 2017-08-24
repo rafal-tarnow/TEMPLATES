@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ProsteCząstki", "ProsteCząstk.vcxproj", "{AAFC83A0-E200-4861-A7E7-3C83A5DA76A0}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ProsteCząstki", "ProsteCząstki.vcxproj", "{8CB0F2C5-898F-4C17-B247-0AAD744E2873}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AAFC83A0-E200-4861-A7E7-3C83A5DA76A0}.Debug|Win32.ActiveCfg = Debug|Win32
+		{AAFC83A0-E200-4861-A7E7-3C83A5DA76A0}.Debug|Win32.Build.0 = Debug|Win32
+		{AAFC83A0-E200-4861-A7E7-3C83A5DA76A0}.Release|Win32.ActiveCfg = Release|Win32
+		{AAFC83A0-E200-4861-A7E7-3C83A5DA76A0}.Release|Win32.Build.0 = Release|Win32
+		{8CB0F2C5-898F-4C17-B247-0AAD744E2873}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8CB0F2C5-898F-4C17-B247-0AAD744E2873}.Debug|Win32.Build.0 = Debug|Win32
+		{8CB0F2C5-898F-4C17-B247-0AAD744E2873}.Release|Win32.ActiveCfg = Release|Win32
+		{8CB0F2C5-898F-4C17-B247-0AAD744E2873}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

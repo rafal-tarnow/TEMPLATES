@@ -83,8 +83,9 @@ void draw() {
 
 
 void timer(int value){
-    glutTimerFunc(20,timer,0);
+    glutTimerFunc(30,timer,0);
     angle += 1.0f;
+    glutPostRedisplay();
 }
 
 void idle(){
@@ -112,9 +113,9 @@ int main(int argc, char** argv) {
     glutReshapeFunc(reshape);
     glutDisplayFunc(draw);
     glutTimerFunc(100,timer,0);
-    glutIdleFunc(idle);
+    //glutIdleFunc(idle);
 
-    enableMultisample(0);
+    enableMultisample(1);
 
     glutMainLoop();
     return 0;
