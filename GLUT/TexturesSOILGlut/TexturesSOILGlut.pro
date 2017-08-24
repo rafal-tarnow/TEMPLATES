@@ -20,7 +20,6 @@ HEADERS += \
 
 LIBS += -lX11
 LIBS += -lXi
-LIBS += -lXmu
 LIBS += -lglut
 LIBS += -lGL
 LIBS += -lGLU

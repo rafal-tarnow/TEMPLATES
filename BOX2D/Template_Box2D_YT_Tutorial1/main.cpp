@@ -6,7 +6,10 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <Box2D/Box2D.h>
+#include <iostream>
 #include "texture_factory.hpp"
+
+using namespace std;
 
 const int WIDTH=640;
 const int HEIGHT=480;
@@ -115,6 +118,7 @@ int main(int argc,char** argv)
                 }
                 break;
             case SDL_MOUSEBUTTONDOWN:
+                cout << " event x = " << event.button.x << " y = " << event.button.y << endl;
                 addRect(event.button.x,event.button.y,40,40,true);
                 break;
 
