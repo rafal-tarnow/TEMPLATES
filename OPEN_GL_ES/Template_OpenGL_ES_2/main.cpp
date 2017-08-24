@@ -9,6 +9,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <iostream>
+#include <stack>
 
 using namespace std;
 
@@ -19,8 +20,6 @@ static const GLuint HEIGHT = 600;
 void InitGLFWWindow();
 
 void initOpenGL();
-
-
 
 
 
@@ -62,7 +61,8 @@ void renderFunction(){
         glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(modelMat));
         DE_drawRectangle(&rectangle);
 
-        glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(modelMat));
+        glm::mat4 objectPositionMat = glm::translate(modelMat, glm::vec3(2.0f, 0.0f, 0.0f));
+        glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(objectPositionMat));
         DE_drawRectangle(&coinRectangle);
 
     }
@@ -104,8 +104,6 @@ int main(void) {
     glfwTerminate();
     return EXIT_SUCCESS;
 }
-
-
 
 
 
