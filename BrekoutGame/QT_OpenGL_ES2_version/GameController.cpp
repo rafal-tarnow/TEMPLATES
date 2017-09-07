@@ -79,9 +79,9 @@ void GameController::Init (GLuint frameBufferWidth, GLuint frameBufferHeight)
     mFrameBufferHeight = frameBufferHeight;
     
     // Load shaders
-    ResourceManager::LoadShader (SHADER_FULL_DIR"sprite.vs", SHADER_FULL_DIR"sprite.frag", nullptr, "sprite");
-    ResourceManager::LoadShader (SHADER_FULL_DIR"particle.vs", SHADER_FULL_DIR"particle.frag", nullptr, "particle");
-    ResourceManager::LoadShader (SHADER_FULL_DIR"post_processing.vs", SHADER_FULL_DIR"post_processing.frag", nullptr, "postprocessing");
+    ResourceManager::LoadShader (SHADER_FULL_DIR"sprite.vs", SHADER_FULL_DIR"sprite.frag", "sprite");
+    ResourceManager::LoadShader (SHADER_FULL_DIR"particle.vs", SHADER_FULL_DIR"particle.frag", "particle");
+    ResourceManager::LoadShader (SHADER_FULL_DIR"post_processing.vs", SHADER_FULL_DIR"post_processing.frag", "postprocessing");
     
     // Configure shaders
     // The first four arguments specify in order the left, right, bottom and top part of the projection frustum.

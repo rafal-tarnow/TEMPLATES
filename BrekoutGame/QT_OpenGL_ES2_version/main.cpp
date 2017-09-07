@@ -6,7 +6,6 @@
 //  Copyright © 2016年 梅宇宸. All rights reserved.
 //
 
-#define GLEW_STATIC
 
 #include "GameController.hpp"
 #include "ResourceManager.hpp"
@@ -33,8 +32,6 @@ int main(int argc, char *argv[])
     GLFWwindow* window = glfwCreateWindow (SCREEN_WIDTH, SCREEN_HEIGHT, "Breakout", nullptr, nullptr);
     glfwMakeContextCurrent (window);
 
-    //glewExperimental = GL_TRUE;
-    //glewInit ();
     glGetError (); // Call it once to catch glewInit() bug, all other errors are now from our application.
 
     glfwSetKeyCallback (window, key_callback);

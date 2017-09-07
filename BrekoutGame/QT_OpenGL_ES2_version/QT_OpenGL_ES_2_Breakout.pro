@@ -20,9 +20,7 @@ LIBS += $$PWD/irrKlang/linux-gcc-64/libIrrKlang.so
 
 LIBS += -lglfw
 LIBS += -lSOIL
-#LIBS += -lGL
 LIBS += -lGLESv2
-LIBS += -lGLEW
 LIBS += -lfreetype
 LIBS += -lpthread
 

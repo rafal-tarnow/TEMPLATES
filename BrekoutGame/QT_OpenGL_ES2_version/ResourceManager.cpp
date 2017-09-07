@@ -20,9 +20,9 @@
 std::map<std::string, Texture2D> ResourceManager::Textures;
 std::map<std::string, Shader> ResourceManager::Shaders;
 
-void ResourceManager::LoadShader (const GLchar *vShaderFile, const GLchar *fShaderFile, const GLchar *gShaderFile, std::string name)
+void ResourceManager::LoadShader (const GLchar *vShaderFile, const GLchar *fShaderFile, std::string name)
 {
-    Shaders[name] = LoadShaderFromFile (vShaderFile, fShaderFile, gShaderFile);
+    Shaders[name] = LoadShaderFromFile (vShaderFile, fShaderFile);
 }
 
 Shader& ResourceManager::GetShader(std::string name)
@@ -50,7 +50,7 @@ void ResourceManager::Clear ()
         glDeleteTextures(1, &iter.second.ID);
 }
 
-Shader ResourceManager::LoadShaderFromFile (const GLchar* vShaderFile, const GLchar* fShaderFile, const GLchar*gShaderFile)
+Shader ResourceManager::LoadShaderFromFile (const GLchar* vShaderFile, const GLchar* fShaderFile)
 {
     // 1. Retrieve the vertex/fragment source code from filePath
     std::string vertexCode;
@@ -71,15 +71,6 @@ Shader ResourceManager::LoadShaderFromFile (const GLchar* vShaderFile, const GLc
         // Convert stream into string
         vertexCode = vShaderStream.str();
         fragmentCode = fShaderStream.str();
-        // If geometry shader path is present, also load a geometry shader
-        if (gShaderFile != nullptr)
-        {
-            std::ifstream geometryShaderFile(gShaderFile);
-            std::stringstream gShaderStream;
-            gShaderStream << geometryShaderFile.rdbuf();
-            geometryShaderFile.close();
-            geometryCode = gShaderStream.str();
-        }
     }
     catch (std::exception e)
     {
@@ -90,7 +81,7 @@ Shader ResourceManager::LoadShaderFromFile (const GLchar* vShaderFile, const GLc
     const GLchar *gShaderCode = geometryCode.c_str();
     // 2. Now create shader object from source code
     Shader shader;
-    shader.Compile(vShaderCode, fShaderCode, gShaderFile != nullptr ? gShaderCode : nullptr);
+    shader.Compile(vShaderCode, fShaderCode);
     return shader;
 }
 
