@@ -50,6 +50,7 @@ private:
     Shader shader;
     Texture2D texture;
     GLuint VAO;
+    GLuint VBO;
     // Initializes buffer and vertex attributes
     void init ();
     // Returns the first Particle index that's currently unused e.g. Life <= 0.0f or 0 if no particle is currently inactive

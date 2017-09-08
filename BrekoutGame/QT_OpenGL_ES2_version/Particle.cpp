@@ -7,18 +7,21 @@
 //
 
 #include "Particle.hpp"
-
+#include <iostream>
+using namespace std;
 
 ParticleGenerator::ParticleGenerator (Shader shader, Texture2D texture, GLuint amount)
-: shader (shader), texture (texture), amount (amount)
+    : shader (shader), texture (texture), amount (amount)
 {
     this->init ();
 }
 
+static bool draw_vao = true;
+
 void ParticleGenerator::init ()
 {
     // Set up mesh and attribute properties
-    GLuint VBO;
+
     GLfloat particle_quad[] = {
         // Pos      // TexCoord
         0.0f, 0.0f, 0.0f, 0.0f,
@@ -26,18 +29,26 @@ void ParticleGenerator::init ()
         1.0f, 0.0f, 1.0f, 0.0f,
         1.0f, 1.0f, 1.0f, 1.0f
     };
-    glGenVertexArrays (1, &this->VAO);
-    glGenBuffers (1, &VBO);
-    glBindVertexArray (this->VAO);
-    
-    // Fill mesh buffer
-    glBindBuffer (GL_ARRAY_BUFFER, VBO);
-    glBufferData (GL_ARRAY_BUFFER, sizeof (particle_quad), particle_quad, GL_STATIC_DRAW);
-    
-    // Set mesh attributes
-    glEnableVertexAttribArray (0);
-    glVertexAttribPointer (0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)0);
-    glBindVertexArray (0);
+
+    if(draw_vao){
+        glGenVertexArrays (1, &this->VAO);
+        glGenBuffers (1, &this->VBO);
+        glBindVertexArray (this->VAO);
+
+        // Fill mesh buffer
+        glBindBuffer (GL_ARRAY_BUFFER, this->VBO);
+        glBufferData (GL_ARRAY_BUFFER, sizeof (particle_quad), particle_quad, GL_STATIC_DRAW);
+
+        // Set mesh attributes
+        glEnableVertexAttribArray (0);
+        glVertexAttribPointer (0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)0);
+        glBindVertexArray (0);
+    }else{
+        glGenBuffers(1, &this->VBO);
+        glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
+        glBufferData (GL_ARRAY_BUFFER, sizeof (particle_quad), particle_quad, GL_STATIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+    }
     
     // Create this->amount default particle instances
     for (GLuint i = 0; i < this->amount; ++i)
@@ -78,10 +89,39 @@ void ParticleGenerator::Draw ()
         {
             this->shader.SetVector2f ("offset", particle.Position);
             this->shader.SetVector4f ("color", particle.Color);
-            this->texture.Bind ();
-            glBindVertexArray (this->VAO);
-            glDrawArrays (GL_TRIANGLE_STRIP, 0, 4);
-            glBindVertexArray (0);
+
+
+
+
+            if(draw_vao){
+
+
+                glBindVertexArray (this->VAO);
+
+                glActiveTexture(GL_TEXTURE0);
+                glBindTexture(GL_TEXTURE_2D, this->texture.ID);
+                glUniform1i(glGetUniformLocation (this->shader.ID, "sprite" ), GL_TEXTURE0);
+
+                glDrawArrays (GL_TRIANGLE_STRIP, 0, 4);
+                glBindVertexArray (0);
+            }else{
+
+                glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
+
+
+                glVertexAttribPointer (glGetAttribLocation(this->shader.ID,"vertex"), 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)0);
+                glEnableVertexAttribArray (glGetAttribLocation(this->shader.ID,"vertex"));
+
+
+                glActiveTexture(GL_TEXTURE0);
+                glBindTexture(GL_TEXTURE_2D, this->texture.ID);
+                glUniform1i(glGetUniformLocation (this->shader.ID, "sprite" ), GL_TEXTURE0);
+
+
+                glDrawArrays (GL_TRIANGLE_STRIP, 0, 4);
+                glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+            }
         }
     }
     // Don't forget to reset to default blending mode
