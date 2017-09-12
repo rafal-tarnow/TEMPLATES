@@ -3,6 +3,8 @@ CONFIG += console
 CONFIG -= app_bundle
 CONFIG -= qt
 
+LIBS += -lGLESv2
+LIBS += -lglfw
 
 ######## COPY FILES FORM DATA DIRECTORY DO BUILD DIRECTORY #####
 copydata.commands = $(COPY_DIR) -r $$PWD/data $$OUT_PWD
@@ -195,7 +197,8 @@ SOURCES += \
 #    src/type42/t42parse.c \
 #    src/type42/type42.c \
   #  src/winfonts/winfnt.c \
-    main.cpp
+    main.cpp \
+    TextRenderer.cpp
 
 
 HEADERS += \
@@ -452,7 +455,10 @@ HEADERS += \
     include/freetype/tttables.h \
     include/freetype/tttags.h \
     include/freetype/ttunpat.h \
-    include/ft2build.h
+    include/ft2build.h \
+    TextRenderer.hpp \
+    opengl_includes.hpp \
+    TextRenderer_shaders.hpp
 
 DISTFILES += \
     data/font/arial.ttf \

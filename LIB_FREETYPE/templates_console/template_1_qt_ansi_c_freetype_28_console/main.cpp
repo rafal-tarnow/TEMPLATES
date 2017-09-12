@@ -6,6 +6,24 @@ using namespace std;
 
 #include <bitset>
 
+void drawGlyphToConsole(FT_Face &face){
+    for(unsigned int i = 0; i < face->glyph->bitmap.rows; i++){
+        for(unsigned int j = 0; j < face->glyph->bitmap.width; j++){
+
+            int alpha_value =   (int)(face->glyph->bitmap.buffer[i*face->glyph->bitmap.width + j]) / 26;
+
+            if(alpha_value > 0){
+                cout << alpha_value;
+            }else{
+                cout << " ";
+            }
+
+
+        }
+        cout << endl;
+    }
+}
+
 int main()
 {
     FT_Library ft;
@@ -31,21 +49,9 @@ int main()
 
 
 
-    for(int i = 0; i < face->glyph->bitmap.rows; i++){
-        for(int j = 0; j < face->glyph->bitmap.width; j++){
-
-            int alpha_value =   (int)(face->glyph->bitmap.buffer[i*face->glyph->bitmap.width + j]) / 26;
-
-            if(alpha_value > 0){
-                cout << alpha_value;
-            }else{
-                cout << " ";
-            }
+    drawGlyphToConsole(face);
 
 
-        }
-        cout << endl;
-    }
 
 
 
