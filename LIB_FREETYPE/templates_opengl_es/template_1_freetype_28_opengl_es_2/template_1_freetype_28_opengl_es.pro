@@ -197,8 +197,7 @@ SOURCES += \
 #    src/type42/t42parse.c \
 #    src/type42/type42.c \
   #  src/winfonts/winfnt.c \
-    main.cpp \
-    TextRenderer.cpp
+    main.cpp
 
 
 HEADERS += \
@@ -456,9 +455,7 @@ HEADERS += \
     include/freetype/tttags.h \
     include/freetype/ttunpat.h \
     include/ft2build.h \
-    TextRenderer.hpp \
-    opengl_includes.hpp \
-    TextRenderer_shaders.hpp
+    opengl_includes.hpp
 
 DISTFILES += \
     data/font/arial.ttf \

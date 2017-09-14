@@ -1,0 +1,3 @@
+[submodule "submodules/library_opengles_2"]
+	path = submodules/library_opengles_2
+	url = https://github.com/rafal-tarnow/library_opengles_2.git

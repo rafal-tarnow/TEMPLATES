@@ -13,7 +13,7 @@ TextRenderer * textRenderer;
 
 void init(){
     textRenderer = new TextRenderer();
-    textRenderer->Load("./data/font/arial.ttf", 472);
+    textRenderer->Load("./data/font/arial.ttf", 10);
 }
 
 void reshape(GLFWwindow * window, int width, int height){
