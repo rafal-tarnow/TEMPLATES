@@ -1,3 +1,5 @@
+include(../../../submodules/library_opengles_2/library_opengles_2.pri)
+
 TEMPLATE = app
 CONFIG += console
 CONFIG -= app_bundle

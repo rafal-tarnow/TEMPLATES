@@ -35,7 +35,7 @@ class TextRenderer
 {
 public:
     // Holds a list of pre-compiled Characters
-    std::map<GLchar, Character> Characters;
+    std::map<wchar_t, Character> Characters;
     // Shader used for text rendering
     Shader TextShader;
     // Constructor

@@ -24,6 +24,8 @@ int main(int argc, char *argv[])
 {
 
 
+
+
     glfwInit ();
     glfwWindowHint (GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint (GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -85,6 +87,7 @@ int main(int argc, char *argv[])
     ResourceManager::Clear ();
 
     glfwTerminate ();
+
     return 0;
 }
 

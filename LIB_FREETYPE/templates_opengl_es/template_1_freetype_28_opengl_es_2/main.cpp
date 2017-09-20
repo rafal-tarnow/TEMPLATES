@@ -1,35 +1,51 @@
 #include <iostream>
 using namespace std;
 
-#include "opengl_includes.hpp"
-#include "TextRenderer.hpp"
+#include <cstdint>
 
-static const GLuint WIDTH = 800;
-static const GLuint HEIGHT = 600;
+#include "opengl_includes.hpp"
+#include <library_opengles_2/TextRenderer/TextRenderer_v1.hpp>
+
+static const GLuint WIDTH = 640;
+static const GLuint HEIGHT = 480;
 GLFWwindow* window;
 void InitGLFWWindow();
 
-TextRenderer * textRenderer;
+TextRenderer_v1 * textRenderer;
 
 void init(){
-    textRenderer = new TextRenderer();
-    textRenderer->Load("./data/font/arial.ttf", 10);
+    textRenderer = new TextRenderer_v1(WIDTH,HEIGHT);
+    //textRenderer->Load("./data/font/arial.ttf", 375);
+    textRenderer->Load("/usr/share/fonts/truetype/liberation/LiberationSerif-Regular.ttf", 35);
 }
 
 void reshape(GLFWwindow * window, int width, int height){
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     glViewport(0, 0, width, height);
 }
 
 void renderFunction(){
     //cout << "renderFunction()" << endl;
-    glClear(GL_COLOR_BUFFER_BIT );
-    textRenderer->RenderText();
+    glClear(GL_COLOR_BUFFER_BIT);
+    textRenderer->RenderText("W");
 }
 
 
 int main()
 {
+
+    //wchar_t znaki[10] = {"Ą"};
+   // znaki[7] = 'Ą';
+
+    //char *wsk;
+    //wsk = (char*)(&(znaki[0]));
+    //for(unsigned int i = 0; i < 10; i++){
+    //    cout << " " << (unsigned int)(wsk[i]) ;
+   // }
+   // cout << endl;
+
+   // cout << znaki << endl;
+
     InitGLFWWindow();
 
     init();

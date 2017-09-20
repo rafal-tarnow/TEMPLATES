@@ -9,6 +9,9 @@
 #include <sstream>
 #include <iostream>
 #include <algorithm>
+#include <string>
+
+using namespace std;
 
 #include "Texture2D.hpp"
 #include "Shader.hpp"
@@ -73,7 +76,7 @@ GameController::~GameController ()
 void GameController::Init (GLuint frameBufferWidth, GLuint frameBufferHeight)
 {
     mTextRenderer = new TextRenderer (this->mWidth, this->mHeight);
-    mTextRenderer->Load (FONT_FULL_DIR"arial.ttf", 24);
+    mTextRenderer->Load (FONT_FULL_DIR"arial.ttf", 30/*24*/);
     
     mFrameBufferWidth = frameBufferWidth;
     mFrameBufferHeight = frameBufferHeight;
@@ -302,7 +305,7 @@ void GameController::Render ()
     
     if (this->mState == GAME_MENU)
     {
-        mTextRenderer->RenderText ("Press ENTER to start", mWidth / 2 - 110, mHeight / 2 + 4, 1.0f);
+        mTextRenderer->RenderText ("A Ą Ćj Press ENTER to start", (mWidth / 2 - 110), (mHeight / 2 + 4), 1.0f);
         mTextRenderer->RenderText ("Press W or S to select level", mWidth / 2 - 105, mHeight / 2 + 30.0f, 0.75f);
         std::stringstream ss; ss << this->mLevel + 1;
         mTextRenderer->RenderText ("Level: " + ss.str(), 5.0f, 35.0f, 1.0f);
