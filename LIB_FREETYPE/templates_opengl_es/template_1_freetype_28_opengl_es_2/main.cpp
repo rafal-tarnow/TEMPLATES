@@ -2,56 +2,68 @@
 using namespace std;
 
 #include <cstdint>
+#include <iomanip>
+#include <sstream>
 
 #include "opengl_includes.hpp"
-#include <library_opengles_2/TextRenderer/TextRenderer_v1.hpp>
+#include <library_opengles_2/TextRenderer/TextRenderer_v2.hpp>
 
 static const GLuint WIDTH = 640;
 static const GLuint HEIGHT = 480;
 GLFWwindow* window;
 void InitGLFWWindow();
+void renderFunction();
+double calculateFPS();
+void initFPS();
 
-TextRenderer_v1 * textRenderer;
+TextRenderer_v2 * textRenderer = nullptr;
 
 void init(){
-    textRenderer = new TextRenderer_v1(WIDTH,HEIGHT);
-    //textRenderer->Load("./data/font/arial.ttf", 375);
-    textRenderer->Load("/usr/share/fonts/truetype/liberation/LiberationSerif-Regular.ttf", 35);
+    textRenderer = new TextRenderer_v2(WIDTH,HEIGHT);
+    const GLuint fontSize = 35;
+    //textRenderer->Load("./data/font/arial.ttf", fontSize);
+    //textRenderer->Load("/usr/share/fonts/truetype/liberation/LiberationSerif-Regular.ttf", fontSize);
+    //textRenderer->Load("./data/font/dahot_Garfield_www_myfontfree_com.ttf", fontSize);
+    textRenderer->Load("./data/font/design_graffiti_agentorange_www_myfontfree_com.ttf", fontSize);
 }
 
 void reshape(GLFWwindow * window, int width, int height){
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glViewport(0, 0, width, height);
+
+    textRenderer->onVievportResize(width, height);
+
 }
 
 void renderFunction(){
     //cout << "renderFunction()" << endl;
     glClear(GL_COLOR_BUFFER_BIT);
-    textRenderer->RenderText("W");
+
+    static int frame;
+    stringstream ss;
+    ss << "Frame = " << frame++;
+
+    textRenderer->RenderText(ss.str(), 80.0f, 140.0f);
+    textRenderer->RenderText("}", 80.0f, 240.0f);
+    textRenderer->RenderText("A B C", 80.0f, 340.0f);
+
 }
 
 
 int main()
 {
 
-    //wchar_t znaki[10] = {"Ą"};
-   // znaki[7] = 'Ą';
-
-    //char *wsk;
-    //wsk = (char*)(&(znaki[0]));
-    //for(unsigned int i = 0; i < 10; i++){
-    //    cout << " " << (unsigned int)(wsk[i]) ;
-   // }
-   // cout << endl;
-
-   // cout << znaki << endl;
-
     InitGLFWWindow();
 
-    init();
 
-    //MAIN LOOP
+    glfwMakeContextCurrent(window);
+    glfwSwapInterval(0);
+
+
     while (!glfwWindowShouldClose(window)) {
+        //cout << "FPS = "  << calculateFPS() << endl;
+
+
         glfwPollEvents();
         {
             renderFunction();
@@ -77,10 +89,58 @@ void InitGLFWWindow(){
     glfwMakeContextCurrent(window);
 
     glfwSetWindowSizeCallback(window,reshape);
+
+    init();
     reshape(window,WIDTH,HEIGHT);
 
     printf("GL_VERSION  : %s\n", glGetString(GL_VERSION) );
     printf("GL_RENDERER : %s\n", glGetString(GL_RENDERER) );
+
+    initFPS();
 }
 
+
+
+#define SIZE 2000
+static double tablica[SIZE];
+static int index = 0;
+static double suma = 0.0;
+
+void initFPS(){
+    for(int i = 0; i < SIZE; i++){
+        tablica[i] = 0.0;
+    }
+}
+
+
+
+
+double calculateFPS(){
+    static double current_time = 0;
+    static double previous_time = 0;
+    static double delta_time = 0;
+    static double fps = 0;
+
+
+    current_time = glfwGetTime();
+    delta_time = current_time - previous_time;
+    previous_time = current_time;
+
+    fps = 1.0/delta_time;
+
+
+    double tmp = tablica[index];
+
+    tablica[index] = fps;
+    index++;
+
+    if(index == SIZE)
+        index = 0;
+
+    suma = suma + fps - tmp;
+    fps  = suma/SIZE;
+
+
+    return fps;
+}
 
