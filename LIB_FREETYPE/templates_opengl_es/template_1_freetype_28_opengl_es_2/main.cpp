@@ -7,8 +7,9 @@ using namespace std;
 
 #include "opengl_includes.hpp"
 #include <library_opengles_2/TextRenderer/TextRenderer_v2.hpp>
+#include <library_opengles_2/TextRenderer/TextRenderer_v1.hpp>
 
-static const GLuint WIDTH = 640;
+static const GLuint WIDTH = 640*2;
 static const GLuint HEIGHT = 480;
 GLFWwindow* window;
 void InitGLFWWindow();
@@ -16,22 +17,30 @@ void renderFunction();
 double calculateFPS();
 void initFPS();
 
-TextRenderer_v2 * textRenderer = nullptr;
+TextRenderer_v2 * textRenderer_v2 = nullptr;
+TextRenderer_v1 * textRenderer_v1 = nullptr;
 
 void init(){
-    textRenderer = new TextRenderer_v2(WIDTH,HEIGHT);
-    const GLuint fontSize = 35;
-    //textRenderer->Load("./data/font/arial.ttf", fontSize);
-    //textRenderer->Load("/usr/share/fonts/truetype/liberation/LiberationSerif-Regular.ttf", fontSize);
-    //textRenderer->Load("./data/font/dahot_Garfield_www_myfontfree_com.ttf", fontSize);
-    textRenderer->Load("./data/font/design_graffiti_agentorange_www_myfontfree_com.ttf", fontSize);
+    textRenderer_v1 = new TextRenderer_v1(WIDTH,HEIGHT);
+    //textRenderer_v1 = new TextRenderer_v1(WIDTH,HEIGHT);
+    const GLuint fontSize = 110;
+    //textRenderer_v2->Load("./data/font/arial.ttf", fontSize);
+    //textRenderer_v2->Load("/usr/share/fonts/truetype/liberation/LiberationSerif-Regular.ttf", fontSize);
+    //textRenderer_v2->Load("./data/font/dahot_Garfield_www_myfontfree_com.ttf", fontSize);
+    textRenderer_v1->Load("./data/font/design_graffiti_agentorange_www_myfontfree_com.ttf", fontSize);
+
+    //textRenderer_v1->Load("./data/font/arial.ttf", fontSize);
+    //textRenderer_v1->Load("/usr/share/fonts/truetype/liberation/LiberationSerif-Regular.ttf", fontSize);
+    //textRenderer_v1->Load("./data/font/dahot_Garfield_www_myfontfree_com.ttf", fontSize);
+    //textRenderer_v1->Load("./data/font/design_graffiti_agentorange_www_myfontfree_com.ttf", fontSize);
 }
 
 void reshape(GLFWwindow * window, int width, int height){
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glViewport(0, 0, width, height);
 
-    textRenderer->onVievportResize(width, height);
+    //textRenderer_v1->onVievportResize(width, height);
+    textRenderer_v1->onVievportResize(width, height);
 
 }
 
@@ -39,13 +48,17 @@ void renderFunction(){
     //cout << "renderFunction()" << endl;
     glClear(GL_COLOR_BUFFER_BIT);
 
-    static int frame;
-    stringstream ss;
-    ss << "Frame = " << frame++;
 
-    textRenderer->RenderText(ss.str(), 80.0f, 140.0f);
-    textRenderer->RenderText("}", 80.0f, 240.0f);
-    textRenderer->RenderText("A B C", 80.0f, 340.0f);
+
+//    textRenderer_v1->RenderText("!", 80.0f, 440.0f);
+//    textRenderer_v1->RenderText("Text = # dupa", 80.0f, 340.0f);
+//    //textRenderer_v1->RenderText("}", 80.0f, 240.0f);
+//    textRenderer_v1->RenderText(ss.str(), 80.0f, 140.0f);
+
+    //textRenderer_v2->RenderText("!", 80.0f, 440.0f);
+    //textRenderer_v2->RenderText("Text = # dupa", 80.0f, 340.0f);
+    //textRenderer_v2->RenderText("}", 80.0f, 240.0f);
+    textRenderer_v1->RenderText("AZCDEFGHIJKLMNOPQRSTUWXYZABCDEFGHIJKLMNOPQRSTUWXYZABCDEFGHIJKLMNOPQRSTUWXYZ", 80.0f, 140.0f);
 
 }
 
@@ -61,7 +74,7 @@ int main()
 
 
     while (!glfwWindowShouldClose(window)) {
-        //cout << "FPS = "  << calculateFPS() << endl;
+        cout << "FPS = "  << calculateFPS() << endl;
 
 
         glfwPollEvents();
@@ -101,7 +114,7 @@ void InitGLFWWindow(){
 
 
 
-#define SIZE 2000
+#define SIZE 2200
 static double tablica[SIZE];
 static int index = 0;
 static double suma = 0.0;
