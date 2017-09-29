@@ -20,17 +20,17 @@ static const GLchar* vertex_shader_source =
 
 
 static const GLchar* fragment_shader_source =
-        "#version 100                          \n"
-        "precision mediump float;                   \n"
-        "varying vec2 v_TexCoordinate;              \n"
-        "uniform sampler2D textureUnit;              \n"
-        "out vec4 color; \n"
-        "void main() {                              \n"
-        "   vec4 color = texture2D(textureUnit,v_TexCoordinate);\n"
-        "   if (color.a < 0.9)        \n"
-        "      discard;                             \n"
-        "   gl_FragColor = color;                   \n"
-        "}                                          \n";
+        "#version 100                                               \n"
+        "precision mediump float;                                   \n"
+        "varying vec2 v_TexCoordinate;                              \n"
+        "uniform sampler2D textureUnit;                             \n"
+        "//out vec4 color;                                          \n"
+        "void main() {                                              \n"
+        "   vec4 color = texture2D(textureUnit,v_TexCoordinate);    \n"
+        "//   if (color.a < 0.9)                                    \n"
+        "//      discard;                                           \n"
+        "   gl_FragColor = color;                                   \n"
+        "}                                                          \n";
 
 static GLfloat rectangle_vertices[] = {
     1.0f,  1.0f, 0.0f,      1.0f, 1.0f,

@@ -56,8 +56,8 @@ void renderFunction(){
         glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(modelMat));
         DE_drawRectangle(&rectangle);
 
-        glm::mat4 objectPositionMat = glm::translate(modelMat, glm::vec3(2.0f, 0.0f, 0.0f));
-        glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(objectPositionMat));
+        //glm::mat4 objectPositionMat = glm::translate(modelMat, glm::vec3(2.0f, 0.0f, 0.0f));
+        //glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(objectPositionMat));
         DE_drawRectangle(&coinRectangle);
 
     }
@@ -78,6 +78,9 @@ int main(void) {
     viewLocation = glGetUniformLocation(shader_prog, "view");
     projectionLocation = glGetUniformLocation(shader_prog, "projection");
 
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     glUseProgram(shader_prog);
     {
         glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projectionMat));
@@ -85,7 +88,7 @@ int main(void) {
     }
     glUseProgram(0);
 
-    DE_initRectangle(&coinRectangle,"./data/png/particle.png",0.5, 0.5);
+    DE_initRectangle(&coinRectangle,"./data/png/coin_2.png",0.5, 0.5);
     DE_initRectangle(&rectangle,"./data/png/bg.png" , 0.8, 0.8);
 
 

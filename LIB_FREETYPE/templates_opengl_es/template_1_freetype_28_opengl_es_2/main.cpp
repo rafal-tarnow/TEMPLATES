@@ -21,13 +21,13 @@ TextRenderer_v2 * textRenderer_v2 = nullptr;
 TextRenderer_v1 * textRenderer_v1 = nullptr;
 
 void init(){
-    textRenderer_v1 = new TextRenderer_v1(WIDTH,HEIGHT);
+    textRenderer_v2 = new TextRenderer_v2(WIDTH,HEIGHT);
     //textRenderer_v1 = new TextRenderer_v1(WIDTH,HEIGHT);
     const GLuint fontSize = 110;
     //textRenderer_v2->Load("./data/font/arial.ttf", fontSize);
     //textRenderer_v2->Load("/usr/share/fonts/truetype/liberation/LiberationSerif-Regular.ttf", fontSize);
     //textRenderer_v2->Load("./data/font/dahot_Garfield_www_myfontfree_com.ttf", fontSize);
-    textRenderer_v1->Load("./data/font/design_graffiti_agentorange_www_myfontfree_com.ttf", fontSize);
+    textRenderer_v2->Load("./data/font/design_graffiti_agentorange_www_myfontfree_com.ttf", fontSize);
 
     //textRenderer_v1->Load("./data/font/arial.ttf", fontSize);
     //textRenderer_v1->Load("/usr/share/fonts/truetype/liberation/LiberationSerif-Regular.ttf", fontSize);
@@ -40,7 +40,7 @@ void reshape(GLFWwindow * window, int width, int height){
     glViewport(0, 0, width, height);
 
     //textRenderer_v1->onVievportResize(width, height);
-    textRenderer_v1->onVievportResize(width, height);
+    textRenderer_v2->onVievportResize(width, height);
 
 }
 
@@ -58,7 +58,7 @@ void renderFunction(){
     //textRenderer_v2->RenderText("!", 80.0f, 440.0f);
     //textRenderer_v2->RenderText("Text = # dupa", 80.0f, 340.0f);
     //textRenderer_v2->RenderText("}", 80.0f, 240.0f);
-    textRenderer_v1->RenderText("AZCDEFGHIJKLMNOPQRSTUWXYZABCDEFGHIJKLMNOPQRSTUWXYZABCDEFGHIJKLMNOPQRSTUWXYZ", 80.0f, 140.0f);
+    textRenderer_v2->RenderText("AZCDEFGHIJKLMNOPQRSTUWXYZABCDEFGHIJKLMNOPQRSTUWXYZABCDEFGHIJKLMNOPQRSTUWXYZ", 80.0f, 140.0f);
 
 }
 
