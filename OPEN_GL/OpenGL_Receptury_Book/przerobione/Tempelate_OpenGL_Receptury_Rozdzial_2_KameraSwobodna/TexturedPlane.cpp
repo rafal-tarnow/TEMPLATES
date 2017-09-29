@@ -23,6 +23,7 @@ CTexturedPlane::CTexturedPlane(const int w, const int d)
 
 CTexturedPlane::~CTexturedPlane(void)
 {
+
 }
 
 int CTexturedPlane::GetTotalVertices() {
