@@ -13,7 +13,7 @@
 #include <iostream>
 using namespace std;
 
-#define GL_CHECK_ERRORS assert(glGetError()== GL_NO_ERROR);
+#define GL_CHECK_ERRORS //assert(glGetError()== GL_NO_ERROR);
 
 //do ustalania dokładnoci obliczeń
 const float EPSILON = 0.001f;

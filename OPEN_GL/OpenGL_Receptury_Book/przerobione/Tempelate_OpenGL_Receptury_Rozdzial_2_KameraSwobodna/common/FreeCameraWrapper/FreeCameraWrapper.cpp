@@ -56,51 +56,64 @@ void FreeCameraWrapper::systemInput_OnIdle() {
 
 void FreeCameraWrapper::systemInput_OnKeyEvent(unsigned char key, KeyEvent event,  int x, int y) {
 
-    cout << "Key Down" << endl;
+
 
     if(event == DOWN){
-
+        cout << "Key Down" << endl;
         switch(key) {
         case ' ':
             useMouseFiltering = !useMouseFiltering;
             break;
         case 'w':
+        case 'W':
             Key_w_Pressed = true;
             break;
         case 's':
+        case 'S':
             Key_s_Pressed = true;
             break;
         case 'a':
+        case 'A':
             Key_a_Pressed = true;
             break;
         case 'd':
+        case 'D':
             Key_d_Pressed = true;
             break;
         case 'q':
+        case 'Q':
             Key_q_Pressed = true;
             break;
         case 'e':
+        case 'E':
             Key_e_Pressed = true;
             break;
         }
     }else if(event == UP){
+        cout << "Key Up" << endl;
         switch(key) {
         case 'w':
+        case 'W':
             Key_w_Pressed = false;
             break;
         case 's':
+        case 'S':
             Key_s_Pressed = false;
             break;
         case 'a':
+        case 'A':
             Key_a_Pressed = false;
             break;
         case 'd':
+        case 'D':
             Key_d_Pressed = false;
             break;
         case 'q':
+        case 'Q':
             Key_q_Pressed = false;
             break;
         case 'e':
+        case 'E':
             Key_e_Pressed = false;
             break;
         }
@@ -109,6 +122,7 @@ void FreeCameraWrapper::systemInput_OnKeyEvent(unsigned char key, KeyEvent event
 
 void FreeCameraWrapper::systemInput_Render(float dt){
 
+ glBindTexture(GL_TEXTURE_2D, checkerTextureID);
     m_dt = dt;
 
     //transformacje kamery
@@ -185,11 +199,13 @@ void FreeCameraWrapper::filterMouseMoves(float dx, float dy) {
 }
 
 void FreeCameraWrapper::prepareChessboard(){
+    cout << "FreeCameraWrapper::prepareChessboard()" << endl;
     GL_CHECK_ERRORS
             GLubyte szachownica[128][128]={0};
     for(int j=0;j<128;j++) {
         for(int i=0;i<128;i++) {
             szachownica[i][j]=(i<=64 && j<=64 || i>64 && j>64 )?255:0;
+            cout << "szachownica[" << i << "]" << "[" << j << "]" << " = " << szachownica[i][j] << endl;
         }
     }
     //generowanie obiektu szachownicy

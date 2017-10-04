@@ -20,13 +20,13 @@ float delta_time = 0.0f;
 FreeCameraWrapper * freeCameraWrapper;
 
 void OnMouseMove(int x, int y){
-    //freeCameraWrapper->systemInput_OnMouseMove(x,y);
+    freeCameraWrapper->systemInput_OnMouseMove(x,y);
     glutPostRedisplay();
 }
 
 void OnMouseButtonEvent(int button, int s, int x, int y){
     cout << "GLUT OnMouseDown(int button, int s, int x, int y)" << endl;
-    //freeCameraWrapper->systemInput_OnMouseButtonEvent(button, s, x, y);
+    freeCameraWrapper->systemInput_OnMouseButtonEvent(button, s, x, y);
 }
 
 void OnShutdown() {
@@ -39,19 +39,19 @@ void OnResize(int w, int h) {
 }
 
 void OnIdle() {
-    //freeCameraWrapper->systemInput_OnIdle();
+    freeCameraWrapper->systemInput_OnIdle();
     glutPostRedisplay();
 }
 
 void OnKeyDown(unsigned char key, int x, int y)
 {
-    //freeCameraWrapper->systemInput_OnKeyEvent(key, FreeCameraWrapper::DOWN, x,y);
+    freeCameraWrapper->systemInput_OnKeyEvent(key, FreeCameraWrapper::DOWN, x,y);
     glutPostRedisplay();
 }
 
 void OnKeyUp(unsigned char key, int x, int y)
 {
-    //freeCameraWrapper->systemInput_OnKeyEvent(key, FreeCameraWrapper::UP, x, y);
+    freeCameraWrapper->systemInput_OnKeyEvent(key, FreeCameraWrapper::UP, x, y);
     glutPostRedisplay();
 }
 
