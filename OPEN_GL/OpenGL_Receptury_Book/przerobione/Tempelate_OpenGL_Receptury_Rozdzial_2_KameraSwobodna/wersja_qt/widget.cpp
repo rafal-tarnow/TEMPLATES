@@ -93,7 +93,7 @@ void Widget::keyReleaseEvent(QKeyEvent *event){
 }
 
 void Widget::mouseMoveEvent(QMouseEvent *event){
-    freeCameraWrapper->systemInput_OnMouseMove(event->x(),event->y());
+    //freeCameraWrapper->systemInput_OnMouseMove(event->x(),event->y());
 }
 
 void Widget::mousePressEvent(QMouseEvent *event){
@@ -101,7 +101,7 @@ void Widget::mousePressEvent(QMouseEvent *event){
 }
 
 void Widget::mouseReleaseEvent(QMouseEvent *event){
-     freeCameraWrapper->systemInput_OnMouseButtonEvent(GLUT_LEFT_BUTTON ,GLUT_UP, event->x(), event->y());
+     //freeCameraWrapper->systemInput_OnMouseButtonEvent(GLUT_LEFT_BUTTON ,GLUT_UP, event->x(), event->y());
 }
 
 void Widget::onIdleTimer(){

@@ -54,10 +54,8 @@ void FreeCameraWrapper::systemInput_OnIdle() {
 
 }
 
-void FreeCameraWrapper::systemInput_OnKeyEvent(unsigned char key, KeyEvent event,  int x, int y) {
-
-
-
+void FreeCameraWrapper::systemInput_OnKeyEvent(unsigned char key, KeyEvent event,  int x, int y)
+{
     if(event == DOWN){
         cout << "Key Down" << endl;
         switch(key) {
