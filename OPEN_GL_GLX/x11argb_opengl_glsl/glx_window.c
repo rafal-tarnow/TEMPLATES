@@ -6,6 +6,7 @@ extern “C” {
 #include <stdio.h>
 
 
+
     static GLXFBConfig *fbconfigs;
     static int numfbconfigs;
     static XRenderPictFormat *pict_format;
@@ -21,10 +22,13 @@ extern “C” {
         exit(0x666);
     }
 
+
     static Bool WaitForMapNotify(Display *d, XEvent *e, char *arg)
     {
         return d && e && arg && (e->type == MapNotify) && (e->xmap.window == *(Window*)arg);
     }
+
+
 
     static void describe_fbconfig(Display *Xdisplay, GLXFBConfig fbconfig)
     {
@@ -38,10 +42,15 @@ extern “C” {
         glXGetFBConfigAttrib(Xdisplay, fbconfig, GLX_ALPHA_SIZE, &alpha_bits);
         glXGetFBConfigAttrib(Xdisplay, fbconfig, GLX_DEPTH_SIZE, &depth_bits);
 
-        fprintf(stderr, "FBConfig selected:\n" "    Doublebuffer: %s\n" "    Red Bits: %d, Green Bits: %d, Blue Bits: %d, Alpha Bits: %d, Depth Bits: %d\n\n", doublebuffer == True ? "Yes" : "No", red_bits, green_bits, blue_bits, alpha_bits, depth_bits);
+        fprintf(stderr, "FBConfig selected:\n"
+                        "Doublebuffer: %s\n"
+                        "Red Bits: %d, Green Bits: %d, Blue Bits: %d, Alpha Bits: %d, Depth Bits: %d\n",
+                doublebuffer == True ? "Yes" : "No",
+                red_bits, green_bits, blue_bits, alpha_bits, depth_bits);
     }
 
-    void createTheWindow( int *width, int *height, Display * *Xdisplay , int *Xscreen, int * VisData, GLXWindow *glX_window_handle, GLXFBConfig *fbconfig, Atom *del_atom)
+
+    void createTheWindow(int *width, int *height, Display* *Xdisplay, int *Xscreen, int * VisData, GLXWindow *glX_window_handle, GLXFBConfig *fbconfig, Atom *del_atom)
     {
         XEvent event;
         int x,y, attr_mask;
@@ -88,21 +97,41 @@ extern “C” {
         attr.background_pixmap = None;
         attr.border_pixmap = None;
         attr.border_pixel = 0;
-        attr.event_mask = StructureNotifyMask | EnterWindowMask | LeaveWindowMask | ExposureMask | ButtonPressMask | ButtonReleaseMask | OwnerGrabButtonMask | KeyPressMask | KeyReleaseMask;
+        attr.event_mask =
+                StructureNotifyMask |
+                EnterWindowMask |
+                LeaveWindowMask |
+                ExposureMask |
+                ButtonPressMask |
+                ButtonReleaseMask |
+                OwnerGrabButtonMask |
+                KeyPressMask |
+                KeyReleaseMask;
 
-        attr_mask = /* CWBackPixmap| */ CWColormap| CWBorderPixel| CWEventMask;
+        attr_mask =
+                CWBackPixmap|
+                CWColormap|
+                CWBorderPixel|
+                CWEventMask;
 
         *width = DisplayWidth(*Xdisplay, DefaultScreen(*Xdisplay))/2;
         *height = DisplayHeight(*Xdisplay, DefaultScreen(*Xdisplay))/2;
-        x=*width/2, y=*height/2;
+        int const dim = *width < *height ? *width : *height;
 
-        window_handle = XCreateWindow(*Xdisplay, Xroot, x, y, *width, *height, 0, visual->depth, InputOutput, visual->visual, attr_mask, &attr);
+        window_handle = XCreateWindow(	*Xdisplay,
+                                        Xroot,
+                                        0, 0, dim, dim,
+                                        0,
+                                        visual->depth,
+                                        InputOutput,
+                                        visual->visual,
+                                        attr_mask, &attr);
 
         if( !window_handle ) {
             fatalError("Couldn't create the window\n");
         }
 
-#if USE_GLX_CREATE_WINDOW
+#ifdef USE_GLX_CREATE_WINDOW
         int glXattr[] = { None };
         *glX_window_handle = glXCreateWindow(*Xdisplay, *fbconfig, window_handle, glXattr);
         if( !*glX_window_handle ) {
@@ -117,17 +146,24 @@ extern “C” {
         textprop.format = 8;
         textprop.nitems = strlen(title);
 
-        hints.x = x;
-        hints.y = y;
-        hints.width = *width;
-        hints.height = *height;
-        hints.flags = USPosition|USSize;
+        hints.width = dim;
+        hints.height = dim;
+        hints.min_aspect.x = 1;
+        hints.min_aspect.y = 1;
+        hints.max_aspect.x = 1;
+        hints.max_aspect.y = 1;
+
+        hints.flags = USSize|PAspect;
 
         startup_state = XAllocWMHints();
         startup_state->initial_state = NormalState;
         startup_state->flags = StateHint;
 
-        XSetWMProperties(*Xdisplay, window_handle,&textprop, &textprop, NULL, 0,  &hints,startup_state, NULL);
+        XSetWMProperties(*Xdisplay, window_handle,&textprop, &textprop,
+                         NULL, 0,
+                         &hints,
+                         startup_state,
+                         NULL);
 
         XFree(startup_state);
 
@@ -138,8 +174,6 @@ extern “C” {
             XSetWMProtocols(*Xdisplay, window_handle, &*del_atom, 1);
         }
     }
-
-
 
 #ifdef __cplusplus
 }

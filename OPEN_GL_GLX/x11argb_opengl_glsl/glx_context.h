@@ -9,8 +9,8 @@ extern “C” {
 #include <X11/extensions/Xrender.h>
 #include <X11/Xutil.h>
 
-    void createTheRenderContext(Display * *Xdisplay, GLXWindow *glX_window_handle, GLXFBConfig *fbconfig, GLXContext *render_context);
 
+  void createTheRenderContext(Display * *Xdisplay,  GLXWindow *glX_window_handle, GLXFBConfig *fbconfig, GLXContext *render_context);
 
 #ifdef __cplusplus
 }

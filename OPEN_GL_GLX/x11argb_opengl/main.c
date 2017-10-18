@@ -18,24 +18,18 @@
 #include <X11/Xutil.h>
 #include <sys/epoll.h>
 
+
 #include "glx_window.h"
 #include "glx_context.h"
 
 
 #define USE_CHOOSE_FBCONFIG
 
-
-
 int Xscreen;
 Atom del_atom;
-Colormap cmap;
 Display *Xdisplay;
-XVisualInfo *visual;
-XRenderPictFormat *pict_format;
-GLXFBConfig *fbconfigs, fbconfig;
-int numfbconfigs;
+GLXFBConfig  fbconfig;
 GLXContext render_context;
-Window Xroot, window_handle;
 GLXWindow glX_window_handle;
 int width, height;
 
@@ -50,7 +44,6 @@ int VisData[] = {
     GLX_DEPTH_SIZE, 24,
     None
 };
-
 
 
 
@@ -82,7 +75,6 @@ static int analyzeX11Events()
 }
 
 
-
 static void draw_triangle(void)
 {
     glBegin(GL_TRIANGLES);
@@ -100,7 +92,7 @@ static void draw_triangle(void)
 }
 
 
-static void redrawTheWindow()
+static void drawing_redrawTheWindow()
 {
     float const aspect = (float)width / (float)height;
 
@@ -173,12 +165,15 @@ void InicjalizacjaGLEW(){
 int main(int argc, char *argv[])
 {
 
-    createTheWindow(&width, &height/*, Xdisplay*/);
-    createTheRenderContext();
+    createTheWindow(&width, &height, &Xdisplay, &Xscreen, VisData, &glX_window_handle, &fbconfig, &del_atom);
+    createTheRenderContext(&Xdisplay, &glX_window_handle, &fbconfig, &render_context);
+
+      int x11_fd = ConnectionNumber(Xdisplay);
+
 
     InicjalizacjaGLEW();
 
-    int x11_fd = ConnectionNumber(Xdisplay);
+
 
 
     //ADD CLIENT TO EPOLL
@@ -220,13 +215,14 @@ int main(int argc, char *argv[])
                 static int count = 0;
                 printf("[INFO] Zdarzenie z X11 %d\n", count++);
                 analyzeX11Events();
-                redrawTheWindow();
+                 drawing_redrawTheWindow();
             }
             else
             {
                 printf("[WARNING][EPOLL | runApp] Nie odnaleziono odbiorcy dla zdarzenia fd = %d\n", epoll_events[i].data.fd);
             }
         }
+
     }
 
 
