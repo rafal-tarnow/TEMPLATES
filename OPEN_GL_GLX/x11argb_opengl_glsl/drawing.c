@@ -1,6 +1,11 @@
+#ifdef __cplusplus
+extern “C” {
+#endif
+
 #include "drawing.h"
 #include <sys/time.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 
 static const GLchar *vertex_shader_source =
@@ -53,7 +58,7 @@ GLubyte textureDataRGB[TEX_RGB_WIDTH * TEX_RGB_HEIGHT][3] = {
 
 static void pushModelview()
 {
-    GLenum prev_matrix_mode;
+    GLint prev_matrix_mode;
     glGetIntegerv(GL_MATRIX_MODE, &prev_matrix_mode);
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
@@ -62,7 +67,7 @@ static void pushModelview()
 
 static void popModelview()
 {
-    GLenum prev_matrix_mode;
+    GLint prev_matrix_mode;
     glGetIntegerv(GL_MATRIX_MODE, &prev_matrix_mode);
     glMatrixMode(GL_MODELVIEW);
     glPopMatrix();
@@ -229,8 +234,12 @@ void drawing_redrawTheWindow(Display * *Xdisplay, GLXWindow *glX_window_handle, 
     draw_cube();
     popModelview();
 
-    struct timespec Ta, Tb;
 
     glXSwapBuffers(*Xdisplay, *glX_window_handle);
     glXWaitGL();
 }
+
+
+#ifdef __cplusplus
+}
+#endif

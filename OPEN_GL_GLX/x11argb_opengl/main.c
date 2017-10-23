@@ -177,11 +177,12 @@ int main(int argc, char *argv[])
 
 
     //ADD CLIENT TO EPOLL
+#define EPOLL_MAX_EVENTS 64
+
     int _epoll_fd = epoll_create1(0);
     struct epoll_event event;
     event.data.fd = x11_fd;
     event.events = EPOLLIN;
-
     if (epoll_ctl(_epoll_fd, EPOLL_CTL_ADD, x11_fd, &event) == -1)
     {
         printf("[ERROR][EPOLL | addClient] Nie można dodać klienta do Epoll'a fd = %d\n", x11_fd);
@@ -190,7 +191,6 @@ int main(int argc, char *argv[])
 
     //EPOLL MAIN LOOP
     int fileDesc_nums = -1;
-#define EPOLL_MAX_EVENTS 64
     struct epoll_event epoll_events[EPOLL_MAX_EVENTS];
 
 

@@ -12,12 +12,15 @@
 #include <GL/glew.h>
 #include <GL/glx.h>
 #include <X11/Xatom.h>
-#include <X11/extensions/Xrender.h>
+//#include <X11/extensions/Xrender.h>
 #include <X11/Xutil.h>
+#include <sys/epoll.h>
 
 #include "glx_window.h"
 #include "glx_context.h"
 #include "drawing.h"
+
+#define UNUSED __attribute__((unused))
 
 #define USE_CHOOSE_FBCONFIG
 
@@ -38,13 +41,12 @@ static int VisData[] = {
     GLX_GREEN_SIZE, 8,
     GLX_BLUE_SIZE, 8,
     GLX_ALPHA_SIZE, 8,
-    GLX_DEPTH_SIZE, 16,
+    GLX_DEPTH_SIZE, 24,
     None
 };
 
 
-
-static int updateTheMessageQueue()
+static int analyzeX11Events()
 {
     XEvent event;
     XConfigureEvent *xc;
@@ -55,7 +57,7 @@ static int updateTheMessageQueue()
         switch (event.type)
         {
         case ClientMessage:
-            if (event.xclient.data.l[0] == del_atom)
+            if ((Atom)event.xclient.data.l[0] == del_atom)
             {
                 return 0;
             }
@@ -71,17 +73,17 @@ static int updateTheMessageQueue()
     return 1;
 }
 
-static int check_extensions(void)
-{
-    if( !GLEW_ARB_vertex_shader ||
-            !GLEW_ARB_fragment_shader ) {
+
+
+void Initialize_GLEW(){
+    glewInit();
+
+    if( !GLEW_ARB_vertex_shader || !GLEW_ARB_fragment_shader )
+    {
         fputs("Required OpenGL functionality not supported by system.\n", stderr);
-        return 0;
+        exit(-1);
     }
-
-    return 1;
 }
-
 
 
 static double getftime(void) {
@@ -99,22 +101,64 @@ static double getftime(void) {
 }
 
 
-int main(int argc, char *argv[])
+int main(int UNUSED argc, char UNUSED *argv[])
 {
 
     createTheWindow(&width, &height, &Xdisplay, &Xscreen, VisData, &glX_window_handle, &fbconfig, &del_atom);
     createTheRenderContext(&Xdisplay,  &glX_window_handle, &fbconfig, &render_context);
 
-    glewInit();
-    if( !check_extensions() )
-        return -1;
+    int x11_fd = ConnectionNumber(Xdisplay);
+
+    Initialize_GLEW();
 
 
     if( !drawing_init_resources() )
         return -1;
 
-    while (updateTheMessageQueue()) {
-        drawing_redrawTheWindow(&Xdisplay, &glX_window_handle, &width, &height, getftime());
+
+    //ADD CLIENT TO EPOLL
+#define EPOLL_MAX_EVENTS 64
+
+    int _epoll_fd = epoll_create1(0);
+    struct epoll_event event;
+    event.data.fd = x11_fd;
+    event.events = EPOLLIN;
+    if (epoll_ctl(_epoll_fd, EPOLL_CTL_ADD, x11_fd, &event) == -1)
+    {
+        printf("[ERROR][EPOLL | addClient] Nie można dodać klienta do Epoll'a fd = %d\n", x11_fd);
+        return -1;
+    }
+    //EPOLL MAIN LOOP
+    int fileDesc_nums = -1;
+    struct epoll_event epoll_events[EPOLL_MAX_EVENTS];
+
+    //TODO is glXSwapBuffers is needed to start rendering?
+    glXSwapBuffers(Xdisplay, glX_window_handle);
+
+    int run = 1;
+    while(run) {
+        fileDesc_nums = epoll_wait(_epoll_fd, epoll_events, EPOLL_MAX_EVENTS, 1000);
+
+        for (int i = 0; i < fileDesc_nums; i++)
+        {
+            if ((epoll_events[i].events & EPOLLERR) || (epoll_events[i].events & EPOLLHUP) || (!(epoll_events[i].events & EPOLLIN)))
+            {
+                printf("[ERROR] Blad zdarzenia epoll\n");
+                continue;
+            }
+            if (epoll_events[i].data.fd == x11_fd)
+            {
+                static int count = 0;
+                printf("[INFO] Zdarzenie z X11 %d\n", count++);
+                run = analyzeX11Events();
+                drawing_redrawTheWindow(&Xdisplay, &glX_window_handle, &width, &height, getftime());
+            }
+            else
+            {
+                printf("[WARNING][EPOLL | runApp] Nie odnaleziono odbiorcy dla zdarzenia fd = %d\n", epoll_events[i].data.fd);
+            }
+        }
+
     }
 
     return 0;
@@ -147,7 +191,7 @@ int main(int argc, char *argv[])
 
 //  --
 //  <\___/>
-//  / O O \
+//
 //  \_____/  FTB.
 
 //------------------------------------------------------------------------*/

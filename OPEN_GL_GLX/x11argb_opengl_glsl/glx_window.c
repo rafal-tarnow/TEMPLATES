@@ -4,8 +4,8 @@ extern “C” {
 
 #include "glx_window.h"
 #include <stdio.h>
-
-
+#include <stdlib.h>
+#include <string.h>
 
     static GLXFBConfig *fbconfigs;
     static int numfbconfigs;
@@ -22,13 +22,10 @@ extern “C” {
         exit(0x666);
     }
 
-
     static Bool WaitForMapNotify(Display *d, XEvent *e, char *arg)
     {
         return d && e && arg && (e->type == MapNotify) && (e->xmap.window == *(Window*)arg);
     }
-
-
 
     static void describe_fbconfig(Display *Xdisplay, GLXFBConfig fbconfig)
     {
@@ -53,7 +50,8 @@ extern “C” {
     void createTheWindow(int *width, int *height, Display* *Xdisplay, int *Xscreen, int * VisData, GLXWindow *glX_window_handle, GLXFBConfig *fbconfig, Atom *del_atom)
     {
         XEvent event;
-        int x,y, attr_mask;
+        //int x,y;
+        int attr_mask;
         XSizeHints hints;
         XWMHints *startup_state;
         XTextProperty textprop;

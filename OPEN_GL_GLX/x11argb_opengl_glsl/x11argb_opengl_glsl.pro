@@ -4,7 +4,6 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 LIBS += -lX11
-LIBS += -lX11
 LIBS += -lXrender
 LIBS += -lGLEW
 LIBS += -lm

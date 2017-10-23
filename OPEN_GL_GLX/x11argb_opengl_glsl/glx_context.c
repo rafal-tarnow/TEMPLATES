@@ -4,6 +4,8 @@ extern “C” {
 
 #include "glx_context.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 
     static void fatalError(const char *why)
@@ -12,8 +14,12 @@ extern “C” {
         exit(0x666);
     }
 
-    static int ctxErrorHandler( Display *dpy, XErrorEvent *ev )
+
+#define UNUSED __attribute__((unused))
+
+    static int ctxErrorHandler( Display UNUSED *dpy, XErrorEvent UNUSED *ev )
     {
+
         fputs("Error at context creation", stderr);
         return 0;
     }
@@ -106,11 +112,6 @@ extern “C” {
 
 
     }
-
-
-
-
-
 
 
 
