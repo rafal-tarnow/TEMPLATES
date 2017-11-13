@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="lesson_names">
+        <item>Hello Triangle</item>
+        <item>Simple VertexShader</item>
+        <item>Simple Texture</item>
+        <item>Instancing</item>
+        <item>Flag Floating Effect</item>
+        <item>Cubemap</item>
+        <item>Nanosuit Model</item>
+        <item>Rendering Text</item>
+        <item>Blending Window</item>
+        <item>Diffuse Torus</item>
+        <item>Phong TwoSide Teapot</item>
+    </string-array>
+    <string-array name="library_names">
+        <item>HelloTriangle</item>
+        <item>SimpleVertexShader</item>
+        <item>SimpleTexture</item>
+        <item>Instancing</item>
+        <item>FlagEffect</item>
+        <item>Cubemap</item>
+        <item>Nanosuit</item>
+        <item>RenderingText</item>
+        <item>BlendingWindow</item>
+        <item>TorusDiffuse</item>
+        <item>TeapotTwoSide</item>
+    </string-array>
+</resources>

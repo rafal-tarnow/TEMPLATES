@@ -1,0 +1,10 @@
+/Debug
+/build
+*.iml
+/*.settings
+*.cproject
+*.project
+*.classpath
+/Debug/
+# /libs
+# /src/main/assets/model
