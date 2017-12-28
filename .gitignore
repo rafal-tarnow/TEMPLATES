@@ -1,2 +1,9 @@
-*.pro.user
+*pro.user*
+*pro.user
 build-*/
+**/build-*/
+
+Błąd*/
+
+.~lock.
+.~lock.*.odt#
