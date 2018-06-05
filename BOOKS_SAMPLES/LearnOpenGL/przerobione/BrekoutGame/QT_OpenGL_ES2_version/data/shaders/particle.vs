@@ -1,8 +1,11 @@
-#version 330 core
-layout (location = 0) in vec4 vertex; // <vec2 position, vec2 texCoords>
+#version 100
+//#version 330 core
 
-out vec2 TexCoords;
-out vec4 ParticleColor;
+
+attribute vec4 vertex; // <vec2 position, vec2 texCoords>
+
+varying vec2 TexCoords;
+varying vec4 ParticleColor;
 
 uniform mat4 projection;
 uniform vec2 offset;
@@ -14,5 +17,4 @@ void main()
     TexCoords = vertex.zw;
     ParticleColor = color;
     gl_Position = projection * vec4((vertex.xy * scale) + offset, 0.0, 1.0);
-
 }

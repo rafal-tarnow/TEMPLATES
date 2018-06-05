@@ -1,12 +1,15 @@
-#version 330 core
+#version 100
+//#version 330 core
 
-in vec2 TexCoords;
-in vec4 ParticleColor;
-out vec4 color;
+precision mediump float;
+
+varying vec2 TexCoords;
+varying vec4 ParticleColor;
+
 
 uniform sampler2D sprite;
 
 void main()
 {
-    color = (texture(sprite, TexCoords) * ParticleColor);
+    gl_FragColor = (texture2D(sprite, TexCoords) * ParticleColor);
 }

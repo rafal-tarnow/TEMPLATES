@@ -22,14 +22,17 @@ GameController Breakout (SCREEN_WIDTH, SCREEN_HEIGHT);
 
 int main(int argc, char *argv[])
 {
+
+
     glfwInit ();
+//    glfwWindowHint (GLFW_CONTEXT_VERSION_MAJOR, 3);
+//    glfwWindowHint (GLFW_CONTEXT_VERSION_MINOR, 3);
 
     glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
-//    glfwWindowHint (GLFW_CONTEXT_VERSION_MAJOR, 3);
-//    glfwWindowHint (GLFW_CONTEXT_VERSION_MINOR, 3);
+
     glfwWindowHint (GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint (GLFW_RESIZABLE, GL_FALSE);
     glfwWindowHint (GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);   // This is vital on MacOSX
@@ -88,6 +91,7 @@ int main(int argc, char *argv[])
     ResourceManager::Clear ();
 
     glfwTerminate ();
+
     return 0;
 }
 

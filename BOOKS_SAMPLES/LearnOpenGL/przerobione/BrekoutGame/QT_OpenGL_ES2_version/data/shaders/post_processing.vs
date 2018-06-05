@@ -1,8 +1,9 @@
-#version 330 core
+#version 100
+//#version 330 core
 
-layout (location = 0) in vec4 vertex; // <vec2 position, vec2 texCoords>
+attribute vec4 vertex; // <vec2 position, vec2 texCoords>
 
-out vec2 TexCoords;
+varying vec2 TexCoords;
 
 uniform bool  chaos;
 uniform bool  confuse;
@@ -32,7 +33,7 @@ void main()
     if (shake)
     {
         float strength = 0.01;
-        gl_Position.x += cos(time * 10) * strength;
-        gl_Position.y += cos(time * 15) * strength;
+        gl_Position.x += cos(time * 10.0) * strength;
+        gl_Position.y += cos(time * 15.0) * strength;
     }
 }

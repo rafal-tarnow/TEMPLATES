@@ -4,19 +4,15 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 
-copyfile.commands = $(COPY_DIR) -r $$PWD/irrKlang/linux-gcc-64/ikp*.so $$OUT_PWD
 copyfolder.commands = $(COPY_DIR) -r $$PWD/data $$OUT_PWD
-first.depends = $(first) copyfolder copyfile
+first.depends = $(first) copyfolder
 export(first.depends)
 export(copyfolder.commands)
-export(copyfile.commands)
-QMAKE_EXTRA_TARGETS += first copyfolder copyfile
-
+QMAKE_EXTRA_TARGETS += first copyfolder
 
 INCLUDEPATH += $$PWD/include
 INCLUDEPATH += /usr/include/freetype2/
 
-LIBS += $$PWD/irrKlang/linux-gcc-64/libIrrKlang.so
 
 LIBS += -lglfw
 LIBS += -lSOIL

@@ -49,7 +49,6 @@ private:
     // Render state
     Shader shader;
     Texture2D texture;
-    GLuint VAO;
     GLuint VBO;
     // Initializes buffer and vertex attributes
     void init ();

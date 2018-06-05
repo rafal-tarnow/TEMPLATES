@@ -41,9 +41,10 @@ public:
     void Render(GLfloat time);
 private:
     // Render state
-    GLuint MSFBO, FBO; // MSFBO = Multisampled FBO. FBO is regular, used for blitting MS color-buffer to texture
-    GLuint RBO; // RBO is used for multisampled color buffer
-    GLuint VAO;
+    GLuint /*MSFBO,*/ FBO; // MSFBO = Multisampled FBO. FBO is regular, used for blitting MS color-buffer to texture
+    /*GLuint RBO;*/ // RBO is used for multisampled color buffer
+    //GLuint VAO;
+    GLuint VBO;
     // Initialize quad for rendering postprocessing texture
     void initRenderData();
 };

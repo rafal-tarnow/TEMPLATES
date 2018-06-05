@@ -6,6 +6,9 @@
 //  Copyright © 2016年 梅宇宸. All rights reserved.
 //
 #include <iostream>
+#include <string>
+
+using namespace std;
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <ft2build.h>
@@ -23,19 +26,21 @@ TextRenderer::TextRenderer (GLuint width, GLuint height)
     this->TextShader.SetMatrix4 ("projection", glm::ortho(0.0f, static_cast<GLfloat>(width), static_cast<GLfloat>(height), 0.0f), GL_TRUE);
     this->TextShader.SetInteger ("text", 0);
     // Configure VAO/VBO for texture quads
-    glGenVertexArrays (1, &this->VAO);
     glGenBuffers (1, &this->VBO);
-    glBindVertexArray (this->VAO);
     glBindBuffer (GL_ARRAY_BUFFER, this->VBO);
     glBufferData (GL_ARRAY_BUFFER, sizeof(GLfloat) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
-    glEnableVertexAttribArray (0);
-    glVertexAttribPointer (0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
     glBindBuffer (GL_ARRAY_BUFFER, 0);
-    glBindVertexArray (0);
+
 }
 
 void TextRenderer::Load(std::string font, GLuint fontSize)
 {
+
+    string napis;
+    wstring napis_2;
+
+    napis[0];
+
     // First clear the previously loaded Characters
     this->Characters.clear();
     // Then initialize and load the FreeType library
@@ -46,15 +51,23 @@ void TextRenderer::Load(std::string font, GLuint fontSize)
     FT_Face face;
     if (FT_New_Face(ft, font.c_str(), 0, &face))
         std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
+
+    FT_Select_Charmap(face,FT_ENCODING_UNICODE);
     // Set size to load glyphs as
     FT_Set_Pixel_Sizes(face, 0, fontSize);
     // Disable byte-alignment restriction
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     // Then for the first 128 ASCII characters, pre-load/compile their characters and store them
-    for (GLubyte c = 0; c < 128; c++) // lol see what I did there
+
+    wchar_t tablica_znakow[3] = {'A','Ą','C'};
+
+    for (unsigned int i = 0; i < 3; i++) // lol see what I did there
     {
+
+
+
         // Load character glyph
-        if (FT_Load_Char(face, c, FT_LOAD_RENDER))
+        if (FT_Load_Char(face, tablica_znakow[i], FT_LOAD_RENDER))
         {
             std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
             continue;
@@ -66,11 +79,11 @@ void TextRenderer::Load(std::string font, GLuint fontSize)
         glTexImage2D(
                      GL_TEXTURE_2D,
                      0,
-                     GL_RED,
+                     GL_ALPHA,
                      face->glyph->bitmap.width,
                      face->glyph->bitmap.rows,
                      0,
-                     GL_RED,
+                     GL_ALPHA,
                      GL_UNSIGNED_BYTE,
                      face->glyph->bitmap.buffer
                      );
@@ -87,7 +100,7 @@ void TextRenderer::Load(std::string font, GLuint fontSize)
             glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
             static_cast<GLuint>(face->glyph->advance.x)
         };
-        Characters.insert (std::pair<GLchar, Character>(c, character));
+        Characters.insert (std::pair<GLchar, Character>(tablica_znakow[i], character));
     }
     glBindTexture (GL_TEXTURE_2D, 0);
     // Destroy FreeType once we're finished
@@ -101,8 +114,12 @@ void TextRenderer::RenderText (std::string text, GLfloat x, GLfloat y, GLfloat s
     this->TextShader.Use ();
     this->TextShader.SetVector3f ("textColor", color);
     glActiveTexture (GL_TEXTURE0);
-    glBindVertexArray (this->VAO);
+
+    glBindBuffer (GL_ARRAY_BUFFER, this->VBO);
     
+    glEnableVertexAttribArray (0);
+    glVertexAttribPointer (0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
+
     // Iterate through all characters
     std::string::const_iterator c;
     for (c = text.begin(); c != text.end(); c++)
@@ -136,6 +153,6 @@ void TextRenderer::RenderText (std::string text, GLfloat x, GLfloat y, GLfloat s
         // Now advance cursors for next glyph
         x += (ch.Advance >> 6) * scale; // Bitshift by 6 to get value in pixels (1/64th times 2^6 = 64)
     }
-    glBindVertexArray (0);
+    glBindBuffer (GL_ARRAY_BUFFER, 0);
     glBindTexture (GL_TEXTURE_2D, 0);
 }

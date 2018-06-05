@@ -1,8 +1,9 @@
-#version 330 core
+//#version 330 core
+#version 100
 
-layout (location = 0) in vec4 vertex; // <vec2 position, vec2 texCoords>
+attribute vec4 vertex; // <vec2 position, vec2 texCoords>
 
-out vec2 TexCoords;
+varying vec2 TexCoords;
 
 uniform mat4 model;
 uniform mat4 projection;

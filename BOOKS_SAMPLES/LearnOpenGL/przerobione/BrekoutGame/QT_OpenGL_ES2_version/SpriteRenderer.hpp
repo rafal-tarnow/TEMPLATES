@@ -29,7 +29,7 @@ public:
 private:
     // Render state
     Shader shader;
-    GLuint quadVAO;
+    GLuint VBO;
     // Initializes and configures the quad's buffer and vertex attributes
     void initRenderData ();
 };

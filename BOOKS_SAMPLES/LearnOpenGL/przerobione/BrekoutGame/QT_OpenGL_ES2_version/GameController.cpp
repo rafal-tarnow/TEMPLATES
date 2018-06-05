@@ -9,6 +9,9 @@
 #include <sstream>
 #include <iostream>
 #include <algorithm>
+#include <string>
+
+using namespace std;
 
 #include "Texture2D.hpp"
 #include "Shader.hpp"
@@ -28,8 +31,6 @@ const glm::vec2 INITIAL_BALL_VELOCITY (100.0f, -350.0f);
 
 // Radius of the ball object
 const GLfloat BALL_RADIUS = 15.0f;
-
-ISoundEngine* GameController::SoundEngine = createIrrKlangDevice ();
 
 GameController::GameController (GLuint width, GLuint height)
 : mState (GAME_ACTIVE), mKeys (), mWidth (width), mHeight (height)
@@ -73,7 +74,7 @@ GameController::~GameController ()
 void GameController::Init (GLuint frameBufferWidth, GLuint frameBufferHeight)
 {
     mTextRenderer = new TextRenderer (this->mWidth, this->mHeight);
-    mTextRenderer->Load (FONT_FULL_DIR"arial.ttf", 24);
+    mTextRenderer->Load (FONT_FULL_DIR"arial.ttf", 30/*24*/);
     
     mFrameBufferWidth = frameBufferWidth;
     mFrameBufferHeight = frameBufferHeight;
@@ -158,7 +159,6 @@ void GameController::Init (GLuint frameBufferWidth, GLuint frameBufferHeight)
 //    mEffects->Chaos = true;
 //    mEffects->Confuse = true;
     
-    SoundEngine->play2D (SOUND_FULL_DIR"breakout.mp3", GL_TRUE);
     
     mLives = 3;
 }
@@ -302,7 +302,7 @@ void GameController::Render ()
     
     if (this->mState == GAME_MENU)
     {
-        mTextRenderer->RenderText ("Press ENTER to start", mWidth / 2 - 110, mHeight / 2 + 4, 1.0f);
+        mTextRenderer->RenderText ("A Ą Ćj Press ENTER to start", (mWidth / 2 - 110), (mHeight / 2 + 4), 1.0f);
         mTextRenderer->RenderText ("Press W or S to select level", mWidth / 2 - 105, mHeight / 2 + 30.0f, 0.75f);
         std::stringstream ss; ss << this->mLevel + 1;
         mTextRenderer->RenderText ("Level: " + ss.str(), 5.0f, 35.0f, 1.0f);
@@ -400,13 +400,11 @@ void GameController::DetectCollision ()
             {
                 cpVector[i].brick.Destroyed = GL_TRUE;
                 this->SpawnPowerUps (cpVector[i].brick);
-                SoundEngine->play2D (SOUND_FULL_DIR"bleep.mp3", GL_FALSE);
             }
             else
             {   // if block is solid, enable shake effect
                 ShakeTime = 0.05f;
                 mEffects->Shake = true;
-                SoundEngine->play2D (SOUND_FULL_DIR"solid.wav", GL_FALSE);
             }
             // Collision resolution
             Direction dir = std::get<1>(collision);
@@ -477,7 +475,6 @@ void GameController::DetectCollision ()
                 ActivatePowerUp(powerUp);
                 powerUp.Destroyed = GL_TRUE;
                 powerUp.Activated = GL_TRUE;
-                SoundEngine->play2D (SOUND_FULL_DIR"powerup.wav", GL_FALSE);
             }
         }
     }

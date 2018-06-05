@@ -32,7 +32,6 @@ const glm::vec2 INITIAL_BALL_VELOCITY (100.0f, -350.0f);
 // Radius of the ball object
 const GLfloat BALL_RADIUS = 15.0f;
 
-ISoundEngine* GameController::SoundEngine = createIrrKlangDevice ();
 
 GameController::GameController (GLuint width, GLuint height)
 : mState (GAME_ACTIVE), mKeys (), mWidth (width), mHeight (height)

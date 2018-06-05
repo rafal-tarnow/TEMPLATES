@@ -5,5 +5,7 @@ build-*/
 
 Błąd*/
 
+CMakeLists.txt.user
+
 .~lock.
 .~lock.*.odt#

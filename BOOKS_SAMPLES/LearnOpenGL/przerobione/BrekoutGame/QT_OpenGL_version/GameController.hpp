@@ -99,7 +99,6 @@ public:
 
     std::vector<PowerUp> PowerUps;
 
-    static ISoundEngine* SoundEngine;
 
     TextRenderer* mTextRenderer;
 
